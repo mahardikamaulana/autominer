@@ -1,0 +1,73 @@
+[object]
+autominercopper=Kupfererz-Auto-Miner
+autominerstone=Stein-Auto-Miner
+autominerdeepstone=Tiefstein-Auto-Miner
+automineriron=Eisenerz-Auto-Miner
+autominergold=Golderz-Auto-Miner
+autominerivy=Efeu-Erz-Auto-Miner
+autominerquartz=Quarz-Auto-Miner
+autominerglacial=Gletscher-Erz-Auto-Miner
+autominerancientfossil=Uralter Fossilien-Auto-Miner
+autominermycelium=Myzel-Auto-Miner
+autominertungsten=Wolfram-Erz-Auto-Miner
+autominerobsidian=Obsidian-Auto-Miner
+autominermfrostshards=Frostsplitter-Auto-Miner
+automineralchemyshards=Alchemiesplitter-Auto-Miner
+autominerupgradeshards=Aufrüstsplitter-Auto-Miner
+autominerclay=Ton-Auto-Miner
+automineremerald=Smaragd-Auto-Miner
+autominerdiamond=Diamant-Auto-Miner
+automineromnicrystal=Omnikristall-Auto-Miner
+autominerruby=Rubin-Auto-Miner
+autominersapphire=Saphir-Auto-Miner
+autominersand=Sand-Auto-Miner
+automineramethyst=Amethyst-Auto-Miner
+autominersandstone=Sandstein-Auto-Miner
+autominersnowstone=Schneestein-Auto-Miner
+autominerswampstone=Sumpfstein-Auto-Miner
+autominerdeepsandstone=Tiefen-Sandstein-Auto-Miner
+autominerdeepsnowstone=Tiefen-Schneestein-Auto-Miner
+autominerdeepswampstone=Tiefen-Sumpfstein-Auto-Miner
+autominervoidshard=Voidshard-Auto-Miner
+autominerspiderstone=Spiderstone-Auto-Miner
+autominerslimeessence=Schleimessenz-Auto-Miner
+autominerectoplasm=Ektoplasma-Auto-Miner
+autominerbone=Knochen-Auto-Miner
+autominersilk=Seiden-Auto-Miner
+autominerglacialshard=Gletscher-Splitter-Auto-Miner
+autominerwormcarapace=Wurmpanzer-Auto-Miner
+autominerslimeum=Schleimum Erz-Auto-Miner
+autominernightsteelore=Nachtstahl-Erz-Auto-Miner
+autominerspideriteore=Spiderite-Erz-Auto-Miner
+autominerspidervenom=Spidervenom-Erz-Auto-Miner
+autominerphantomdust=Phantomstaub-Auto-Miner
+autominerslimematter=Slimematerie-Auto-Miner
+autominerbloodessence=Blutessenz-Auto-Miner
+autominerspideressence=Spinnenessenz-Auto-Miner
+autominercavespidergland=Höhlenspinnendrüse-Auto-Miner
+autominerbatwing=Fledermausflügel-Auto-Miner
+autominerlifequartz=Lebensquarz-Auto-Miner
+autominerclothscraps=Stoffreste-Auto-Miner
+autominergranite=Granit-Auto-Miner
+autominerrunestone=Runenstein-Auto-Miner
+autominerbasalt=Basalt-Auto-Miner
+automineramber=Bernstein-Auto-Miner
+autominerwool=Woll-Auto-Miner
+automineraltardust=Altardust-Auto-Miner
+autominertopaz=Topas-Auto-Miner
+autominershadowessence=Schattenessenz-Auto-Miner
+autominercryoessence=Kryoessenz-Auto-Miner
+autominerbioessence=Bioessenz-Auto-Miner
+autominerprimordialessence=Uressenz-Auto-Miner
+
+[itemtooltip]
+autotip=Baut automatisch Erz aus dem Boden ab
+
+[settingsui]
+generalsection=Allgemeine Konfiguration
+requireFuel=Holz-Brennstoff erforderlich
+miningSpeed=Abbau-Geschwindigkeitsmultiplikator
+fuelDuration=Brenndauer-Multiplikator
+
+balancesection=Fortschritt & Balance
+enableEndgameMiners=Endspiel-Miner aktivieren (Splitter/Omnikristall)

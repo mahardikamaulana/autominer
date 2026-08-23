@@ -1,0 +1,73 @@
+[object]
+autominercopper=Minero Automático de Cobre
+autominerstone=Minero Automático de Piedra
+autominerdeepstone=Minero Automático de Piedra Profunda
+automineriron=Minero Automático de Hierro
+autominergold=Minero Automático de Oro
+autominerivy=Minero Automático de Lierre
+autominerquartz=Minero Automático de Cuarzo
+autominerglacial=Minero Automático de Mineral Glacial
+autominerancientfossil=Minero Automático de Fósiles Antiguos
+autominermycelium=Minero Automático de Micelio
+autominertungsten=Minero Automático de Tungsteno
+autominerobsidian=Minero Automático de Obsidiana
+autominermfrostshards=Minero Automático de Fragmentos de Escarcha
+automineralchemyshards=Minero Automático de Fragmentos de Alquimia
+autominerupgradeshards=Minero Automático de Fragmentos de Mejora
+autominerclay=Minero Automático de Arcilla
+automineremerald=Minero Automático de Esmeralda
+autominerdiamond=Minero Automático de Diamante
+automineromnicrystal=Minero Automático de Omnicristal
+autominerruby=Minero Automático de Rubí
+autominersapphire=Minero Automático de Zafiro
+autominersand=Minero Automático de Arena
+automineramethyst=Minero Automático de Amatista
+autominersandstone=Minero Automático de Arenisca
+autominersnowstone=Minero Automático de Piedra Nevada
+autominerswampstone=Minero Automático de Piedra de Pantano
+autominerdeepsandstone=Minero Automático de Arenisca Profunda
+autominerdeepsnowstone=Minero Automático de Piedra Nevada Profunda
+autominerdeepswampstone=Minero Automático de Piedra de Pantano Profunda
+autominervoidshard=Minero Automático de Fragmentos del Vacío
+autominerspiderstone=Minero Automático de Piedra de Araña
+autominerslimeessence=Minero Automático de Esencia de Slime
+autominerectoplasm=Minero Automático de Ectoplasma
+autominerbone=Minero Automático de Hueso
+autominersilk=Minero Automático de Seda
+autominerglacialshard=Minero Automático de Fragmentos Glaciales
+autominerwormcarapace=Minero Automático de Caparazón de Gusano
+autominerslimeum=Minero Automático de Slimeum
+autominernightsteelore=Minero Automático de Acero Nocturno
+autominerspideriteore=Minero Automático de Spideriteore
+autominerspidervenom=Minero Automático de Veneno de Araña
+autominerphantomdust=Minero Automático de Polvo Fantasma
+autominerslimematter=Minero Automático de Materia de Slime
+autominerbloodessence=Minero Automático de Esencia de Sangre
+autominerspideressence=Minero Automático de Esencia de Araña
+autominercavespidergland=Minero Automático de Glándula de Araña de Cueva
+autominerbatwing=Minero Automático de Ala de Murciélago
+autominerlifequartz=Minero Automático de Cuarzo Vital
+autominerclothscraps=Minero Automático de Retazos de Tela
+autominergranite=Minero Automático de Granito
+autominerrunestone=Minero Automático de Piedra Rúnica
+autominerbasalt=Minero Automático de Basalto
+automineramber=Minero Automático de Ámbar
+autominerwool=Minero Automático de Lana
+automineraltardust=Minero Automático de Polvo de Altar
+autominertopaz=Minero Automático de topacio
+autominershadowessence=Minero Automático de Esencia Sombría
+autominercryoessence=Minero Automático de Esencia Gélida
+autominerbioessence=Minero Automático de Esencia Orgánica
+autominerprimordialessence=Minero Automático de Esencia Primigenia
+
+[itemtooltip]
+autotip=Extrae automáticamente el mineral del suelo
+
+[settingsui]
+generalsection=Configuración General
+requireFuel=Requerir Combustible de Madera
+miningSpeed=Multiplicador de Velocidad de Minería
+fuelDuration=Multiplicador de Duración de Combustible
+
+balancesection=Progresión y Equilibrio
+enableEndgameMiners=Habilitar Mineros de Fin del Juego (Fragmentos/Omnicristal)

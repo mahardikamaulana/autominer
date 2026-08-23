@@ -1,0 +1,73 @@
+[object]
+autominercopper=구리 광석 자동 채굴기
+autominerstone=돌 자동 채굴기
+autominerdeepstone=심층석 자동 채굴기
+automineriron=철 광석 자동 채굴기
+autominergold=금 광석 자동 채굴기
+autominerivy=아이비 광석 자동 채굴기
+autominerquartz=석영 자동 채굴기
+autominerglacial=빙하 광석 자동 채굴기
+autominerancientfossil=고대 화석 광석 자동 채굴기
+autominermycelium=균사체 광석 자동 채굴기
+autominertungsten=텅스텐 광석 자동 채굴기
+autominerobsidian=흑요석 자동 채굴기
+autominermfrostshards=서리 파편 자동 채굴기
+automineralchemyshards=연금술 파편 자동 채굴기
+autominerupgradeshards=업그레이드 파편 자동 채굴기
+autominerclay=점토 자동 채굴기
+automineremerald=에메랄드 광석 자동 채굴기
+autominerdiamond=다이아몬드 광석 자동 채굴기
+automineromnicrystal=옴니크리스탈 광석 자동 채굴기
+autominerruby=루비 광석 자동 채굴기
+autominersapphire=사파이어 광석 자동 채굴기
+autominersand=모래 자동 채굴기
+automineramethyst=자수정 자동 채굴기
+autominersandstone=사암 자동 채굴기
+autominersnowstone=설암 자동 채굴기
+autominerswampstone=늪지암 자동 채굴기
+autominerdeepsandstone=심층 사암 자동 채굴기
+autominerdeepsnowstone=심층 설암 자동 채굴기
+autominerdeepswampstone=심층 늪지암 자동 채굴기
+autominervoidshard=공허 파편 자동 채굴기
+autominerspiderstone=거미석 자동 채굴기
+autominerslimeessence=슬라임 정수 자동 채굴기
+autominerectoplasm=엑토플라즘 자동 채굴기
+autominerbone=뼈 자동 채굴기
+autominersilk=비단 자동 채굴기
+autominerglacialshard=빙하 파편 자동 채굴기
+autominerwormcarapace=벌레 외갑 자동 채굴기
+autominerslimeum=슬라임움 광석 자동 채굴기
+autominernightsteelore=나이트스틸 광석 자동 채굴기
+autominerspideriteore=스파이더라이트 광석 자동 채굴기
+autominerspidervenom=거미 독 자동 채굴기
+autominerphantomdust=팬텀 더스트 자동 채굴기
+autominerslimematter=슬라임 물질 자동 채굴기
+autominerbloodessence=피의 정수 자동 채굴기
+autominerspideressence=거미 정수 자동 채굴기
+autominercavespidergland=동굴거미 분비선 자동 채굴기
+autominerbatwing=박쥐 날개 자동 채굴기
+autominerlifequartz=생명의 석영 자동 채굴기
+autominerclothscraps=천 조각 자동 채굴기
+autominergranite=화강암 자동 채굴기
+autominerrunestone=룬석 자동 채굴기
+autominerbasalt=현무암 자동 채굴기
+automineramber=호박 자동 채굴기
+autominerwool=양모 자동 채굴기
+automineraltardust=얼터 더스트 자동 채굴기
+autominertopaz=토파즈 자동 채굴기
+autominershadowessence=그림자의 정수 자동 채굴기
+autominercryoessence=서리의 정수 자동 채굴기
+autominerbioessence=생물의 정수 자동 채굴기
+autominerprimordialessence=원시의 정수 자동 채굴기
+
+[itemtooltip]
+autotip=지면에서 광석을 자동으로 채굴합니다
+
+[settingsui]
+generalsection=일반 설정
+requireFuel=통나무 연료 요구
+miningSpeed=채굴 속도 배율
+fuelDuration=연료 지속 시간 배율
+
+balancesection=진행 및 밸런스
+enableEndgameMiners=엔드게임 채굴기 활성화 (파편/옴니크리스탈)

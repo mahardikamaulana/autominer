@@ -1,0 +1,10 @@
+{
+	id = xeraphire.autominer,
+	name = Autominer Fix,
+	version = 1.0.0,
+	gameVersion = 1.3.2,
+	author = Xeraphire,
+	description = Automatic mining of ores\, gems\, and mob materials for Necesse 1.3.2+ with in-game configuration.,
+	clientside = false,
+	optionalDependencies = [aizsave.customsettingslib]
+}

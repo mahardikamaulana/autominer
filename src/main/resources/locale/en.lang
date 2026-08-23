@@ -1,0 +1,73 @@
+[object]
+autominercopper=Copper Ore Auto Miner
+autominerstone=Stone Auto Miner
+autominerdeepstone=Deep Stone Auto Miner
+automineriron=Iron Ore Auto Miner
+autominergold=Gold Ore Auto Miner
+autominerivy=Ivy Ore Auto Miner
+autominerquartz=Quartz Auto Miner
+autominerglacial=Glacial Ore Auto Miner
+autominerancientfossil=Ancient Fossil Ore Auto Miner
+autominermycelium=Mycelium Ore Auto Miner
+autominertungsten=Tungsten Ore Auto Miner
+autominerobsidian=Obsidian Auto Miner
+autominermfrostshards=Frost Shards Auto Miner
+automineralchemyshards=Alchemy Shards Auto Miner
+autominerupgradeshards=Upgrade Shards Auto Miner
+autominerclay=Clay Auto Miner
+automineremerald=Emerald Ore Auto Miner
+autominerdiamond=Diamond Ore Auto Miner
+automineromnicrystal=Omnicrystal Ore Auto Miner
+autominerruby=Ruby Ore Auto Miner
+autominersapphire=Sapphire Auto Miner
+autominersand=Sand Auto Miner
+automineramethyst=Amethyst Auto Miner
+autominersandstone=Sandstone Auto Miner
+autominersnowstone=Snowstone Auto Miner
+autominerswampstone=Swampstone Auto Miner
+autominerdeepsandstone=Deep Sandstone Auto Miner
+autominerdeepsnowstone=Deep Snowstone Auto Miner
+autominerdeepswampstone=Deep Swampstone Auto Miner
+autominervoidshard=Voidshard Auto Miner
+autominerspiderstone=Spiderstone Auto Miner
+autominerslimeessence=Slimeessence Auto Miner
+autominerectoplasm=Ectoplasm Auto Miner
+autominerbone=Bone Auto Miner
+autominersilk=Silk Auto Miner
+autominerglacialshard=Glacialshard Auto Miner
+autominerwormcarapace=Wormcarapace Auto Miner
+autominerslimeum=Slimeum Ore Auto Miner
+autominernightsteelore=Nightsteelore Auto Miner
+autominerspideriteore=Spideriteore Auto Miner
+autominerspidervenom=Spidervenom Auto Miner
+autominerphantomdust=Phantomdust Auto Miner
+autominerslimematter=Slimematter Auto Miner
+autominerbloodessence=Bloodessence Auto Miner
+autominerspideressence=Spideressence Auto Miner
+autominercavespidergland=Cavespidergland Auto Miner
+autominerbatwing=Batwing Auto Miner
+autominerlifequartz=Lifequartz Auto Miner
+autominerclothscraps=Clothscraps Auto Miner
+autominergranite=Granite Auto Miner
+autominerrunestone=Runestone Auto Miner
+autominerbasalt=Basalt Auto Miner
+automineramber=Amber Auto Miner
+autominerwool=Wool Auto Miner
+automineraltardust=Altardust Auto Miner
+autominertopaz=Topaz Auto Miner
+autominershadowessence=Shadow Essence Auto Miner
+autominercryoessence=Cryo Essence Auto Miner
+autominerbioessence=Bio Essence Auto Miner
+autominerprimordialessence=Primordial Essence Auto Miner
+
+[itemtooltip]
+autotip=Automatically mine ore from the ground
+
+[settingsui]
+generalsection=General Configuration
+requireFuel=Require Wood Log Fuel
+miningSpeed=Mining Speed Multiplier
+fuelDuration=Fuel Duration Multiplier
+
+balancesection=Progression & Balance
+enableEndgameMiners=Enable Endgame Miners (Shards/Omnicrystal)
