@@ -5,6 +5,7 @@
 local.properties
 gradle.properties
 *.local
+*.code-workspace
 
 # Gradle & Build Files
 .gradle/
