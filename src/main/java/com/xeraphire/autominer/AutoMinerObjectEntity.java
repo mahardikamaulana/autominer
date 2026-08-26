@@ -36,26 +36,10 @@ public class AutoMinerObjectEntity extends AnyLogFueledProcessingTechInventoryOb
     }
 
     @Override
-    public boolean isFuelRunning() {
+    public int getNextFuelBurnTime(boolean consume) {
         if (!AutoMinerConfig.isRequireFuel()) {
-            return true;
+            return this.getFuelTime(null);
         }
-        return super.isFuelRunning();
-    }
-
-    @Override
-    public boolean canUseFuel() {
-        if (!AutoMinerConfig.isRequireFuel()) {
-            return true;
-        }
-        return super.canUseFuel();
-    }
-
-    @Override
-    public boolean useFuel(boolean force) {
-        if (!AutoMinerConfig.isRequireFuel()) {
-            return true;
-        }
-        return super.useFuel(force);
+        return super.getNextFuelBurnTime(consume);
     }
 }
