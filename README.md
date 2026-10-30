@@ -43,7 +43,6 @@ If [CustomSettingsLib](https://steamcommunity.com/sharedfiles/filedetails/?id=34
 - **Require Wood Log Fuel**: Toggle fuel requirement (Default: `ON`).
 - **Mining Speed Multiplier**: Adjust production rate (1x - 10x).
 - **Fuel Duration Multiplier**: Adjust fuel burn duration (1x - 10x).
-- **Enable Endgame Miners**: Toggle Tier 4 miners (Default: `ON`).
 
 ### Chat Commands
 Settings can also be modified using chat commands:
@@ -51,7 +50,6 @@ Settings can also be modified using chat commands:
 - `/autominer fuel <true|false>` — Toggle fuel requirement.
 - `/autominer speed <1-10>` — Set mining speed multiplier.
 - `/autominer fuelduration <1-10>` — Set fuel duration multiplier.
-- `/autominer endgame <true|false>` — Toggle endgame miners.
 
 ## Installation
 
