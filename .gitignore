@@ -1,4 +1,5 @@
 # Local Environment & Configurations
+.omc/
 .env
 .env.*
 !.env.example
@@ -14,6 +15,7 @@ build/
 bin/
 out/
 gen/
+cfg/
 *.class
 
 # Package / Built Mod Jars (keep gradle wrapper jar)
@@ -50,6 +52,8 @@ latest-crash.log
 *.log
 hs_err_pid*
 replay_pid*
+upload_workshop.sh
+*.vdf
 
 # OS-Specific Files
 # macOS

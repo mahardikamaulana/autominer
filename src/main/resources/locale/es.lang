@@ -4,7 +4,7 @@ autominerstone=Minero Automático de Piedra
 autominerdeepstone=Minero Automático de Piedra Profunda
 automineriron=Minero Automático de Hierro
 autominergold=Minero Automático de Oro
-autominerivy=Minero Automático de Lierre
+autominerivy=Minero Automático de Mineral de Hiedra
 autominerquartz=Minero Automático de Cuarzo
 autominerglacial=Minero Automático de Mineral Glacial
 autominerancientfossil=Minero Automático de Fósiles Antiguos
@@ -38,7 +38,7 @@ autominerglacialshard=Minero Automático de Fragmentos Glaciales
 autominerwormcarapace=Minero Automático de Caparazón de Gusano
 autominerslimeum=Minero Automático de Slimeum
 autominernightsteelore=Minero Automático de Acero Nocturno
-autominerspideriteore=Minero Automático de Spideriteore
+autominerspideriteore=Minero Automático de Mineral de Espiderita
 autominerspidervenom=Minero Automático de Veneno de Araña
 autominerphantomdust=Minero Automático de Polvo Fantasma
 autominerslimematter=Minero Automático de Materia de Slime
@@ -54,14 +54,20 @@ autominerbasalt=Minero Automático de Basalto
 automineramber=Minero Automático de Ámbar
 autominerwool=Minero Automático de Lana
 automineraltardust=Minero Automático de Polvo de Altar
-autominertopaz=Minero Automático de topacio
+autominertopaz=Minero Automático de Topacio
 autominershadowessence=Minero Automático de Esencia Sombría
 autominercryoessence=Minero Automático de Esencia Gélida
 autominerbioessence=Minero Automático de Esencia Orgánica
 autominerprimordialessence=Minero Automático de Esencia Primigenia
+autominercrystalessence=Minero Automático de Esencia de Cristal
+autominerradiatedessence=Minero Automático de Esencia Irradiada
+autominerpristinegear=Minero Automático de Engranaje en Perfecto Estado
+autominerfuelskull=Minero Automático de Calavera de Combustible
+autominerascendedshard=Minero Automático de Fragmento Ascendido
 
 [itemtooltip]
 autotip=Extrae automáticamente el mineral del suelo
+endgamedisabled=Deshabilitado en la configuración del servidor (Mineros de Fin del Juego DESACTIVADOS)
 
 [settingsui]
 generalsection=Configuración General

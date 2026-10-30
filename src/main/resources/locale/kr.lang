@@ -59,9 +59,15 @@ autominershadowessence=그림자의 정수 자동 채굴기
 autominercryoessence=서리의 정수 자동 채굴기
 autominerbioessence=생물의 정수 자동 채굴기
 autominerprimordialessence=원시의 정수 자동 채굴기
+autominercrystalessence=수정의 정수 자동 채굴기
+autominerradiatedessence=방사능 정수 자동 채굴기
+autominerpristinegear=온전한 톱니바퀴 자동 채굴기
+autominerfuelskull=연료 해골 자동 채굴기
+autominerascendedshard=초월한 파편 자동 채굴기
 
 [itemtooltip]
 autotip=지면에서 광석을 자동으로 채굴합니다
+endgamedisabled=서버 설정에서 비활성화됨 (엔드게임 채굴기 꺼짐)
 
 [settingsui]
 generalsection=일반 설정

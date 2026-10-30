@@ -31,7 +31,6 @@ public class AutoMiner {
         }
 
         CommandsManager.registerServerCommand(new AutoMinerChatCommand());
-        CommandsManager.registerClientCommand(new AutoMinerChatCommand());
     }
 
     public void initResources() {

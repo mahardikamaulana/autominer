@@ -19,7 +19,7 @@ public class AutoMinerChatCommand extends ChatCommand {
 
     @Override
     public String getUsage() {
-        return "status | speed <1-10> | fueltime <1-10> | requirefuel <true/false> | endgame <true/false>";
+        return "status | speed <1-10> | fueltime <1-10> | requirefuel <true/false>";
     }
 
     @Override
@@ -37,7 +37,7 @@ public class AutoMinerChatCommand extends ChatCommand {
         List<AutoComplete> list = new ArrayList<>();
         if (args.length <= 1) {
             String curr = args.length == 1 ? args[0].toLowerCase() : "";
-            for (String sub : new String[]{"status", "speed", "fueltime", "requirefuel", "endgame"}) {
+            for (String sub : new String[]{"status", "speed", "fueltime", "fuelduration", "requirefuel", "fuel"}) {
                 if (sub.startsWith(curr)) {
                     list.add(new AutoComplete(args.length, sub));
                 }
@@ -45,10 +45,10 @@ public class AutoMinerChatCommand extends ChatCommand {
         } else if (args.length == 2) {
             String sub = args[0].toLowerCase();
             String curr = args[1].toLowerCase();
-            if (sub.equals("requirefuel") || sub.equals("endgame")) {
+            if (sub.equals("requirefuel") || sub.equals("fuel")) {
                 if ("true".startsWith(curr)) list.add(new AutoComplete(args.length, "true"));
                 if ("false".startsWith(curr)) list.add(new AutoComplete(args.length, "false"));
-            } else if (sub.equals("speed") || sub.equals("fueltime")) {
+            } else if (sub.equals("speed") || sub.equals("fueltime") || sub.equals("fuelduration")) {
                 if ("1".startsWith(curr)) list.add(new AutoComplete(args.length, "1"));
                 if ("2".startsWith(curr)) list.add(new AutoComplete(args.length, "2"));
                 if ("3".startsWith(curr)) list.add(new AutoComplete(args.length, "3"));
@@ -67,11 +67,12 @@ public class AutoMinerChatCommand extends ChatCommand {
             log.add("• Require Fuel: " + AutoMinerConfig.isRequireFuel());
             log.add("• Mining Speed Multiplier: " + AutoMinerConfig.getMiningSpeed() + "x");
             log.add("• Fuel Duration Multiplier: " + AutoMinerConfig.getFuelDuration() + "x");
-            log.add("• Endgame Miners Enabled: " + AutoMinerConfig.isEnableEndgameMiners());
             return true;
         }
 
-        if (serverClient != null && serverClient.getPermissionLevel().getLevel() < PermissionLevel.ADMIN.getLevel()) {
+        boolean isSingleplayer = server != null && server.isSingleplayer();
+        boolean isAdmin = serverClient == null || serverClient.getPermissionLevel().getLevel() >= PermissionLevel.ADMIN.getLevel();
+        if (!isSingleplayer && !isAdmin) {
             log.add("You do not have permission to modify AutoMiner settings.");
             return false;
         }
@@ -99,6 +100,7 @@ public class AutoMinerChatCommand extends ChatCommand {
                     return false;
                 }
             case "fueltime":
+            case "fuelduration":
                 try {
                     int fuel = Integer.parseInt(val);
                     if (fuel < 1 || fuel > 10) {
@@ -113,18 +115,31 @@ public class AutoMinerChatCommand extends ChatCommand {
                     return false;
                 }
             case "requirefuel":
-                boolean req = Boolean.parseBoolean(val);
+            case "fuel":
+                Boolean req = parseStrictBoolean(val);
+                if (req == null) {
+                    log.add("Invalid boolean '" + val + "'. Expected true or false.");
+                    return false;
+                }
                 AutoMinerConfig.setRequireFuel(req);
                 log.add("Require fuel set to: " + AutoMinerConfig.isRequireFuel());
                 return true;
             case "endgame":
-                boolean endgame = Boolean.parseBoolean(val);
-                AutoMinerConfig.setEnableEndgameMiners(endgame);
-                log.add("Endgame miners enabled: " + AutoMinerConfig.isEnableEndgameMiners());
+                log.add("Endgame miners are always available.");
                 return true;
             default:
                 log.add("Unknown subcommand: " + sub + ". Usage: /autominer " + getUsage());
                 return false;
         }
+    }
+
+    private static Boolean parseStrictBoolean(String val) {
+        if ("true".equalsIgnoreCase(val)) {
+            return Boolean.TRUE;
+        }
+        if ("false".equalsIgnoreCase(val)) {
+            return Boolean.FALSE;
+        }
+        return null;
     }
 }

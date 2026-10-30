@@ -11,21 +11,47 @@ public class AutoMinerObjectEntity extends AnyLogFueledProcessingTechInventoryOb
     public static int logFuelTime = 60000;
     public static int defaultRecipeProcessTime = 8000;
     public final AutoMinerDefinition definition;
+    private boolean burningFreeFuel = false;
 
     public AutoMinerObjectEntity(Level level, AutoMinerDefinition definition, int x, int y, Tech... techs) {
         super(level, definition != null ? definition.stringID : "autominer", x, y, 2, 2, false, false, true, techs);
         this.definition = definition;
     }
 
-    public AutoMinerObjectEntity(Level level, String stringID, int x, int y, Tech... techs) {
-        super(level, stringID, x, y, 2, 2, false, false, true, techs);
-        this.definition = null;
+    public boolean isEndgameDisabled() {
+        return false;
+    }
+
+    public boolean isBurningFreeFuel() {
+        return this.burningFreeFuel;
+    }
+
+    @Override
+    public boolean isFuelRunning() {
+        if (this.isEndgameDisabled()) {
+            return false;
+        }
+        if (this.burningFreeFuel && AutoMinerConfig.isRequireFuel()) {
+            return false;
+        }
+        return super.isFuelRunning();
+    }
+
+    @Override
+    public boolean isValidFuelItem(InventoryItem item) {
+        if (item != null && item.item != null && "fuelskull".equals(item.item.getStringID())) {
+            return true;
+        }
+        return super.isValidFuelItem(item);
     }
 
     @Override
     public int getFuelTime(InventoryItem item) {
         int duration = AutoMinerConfig.getFuelDuration();
-        return logFuelTime * Math.max(1, duration);
+        int baseTime = (item != null && item.item != null && "fuelskull".equals(item.item.getStringID()))
+                ? logFuelTime * 5
+                : logFuelTime;
+        return baseTime * Math.max(1, duration);
     }
 
     @Override
@@ -36,10 +62,39 @@ public class AutoMinerObjectEntity extends AnyLogFueledProcessingTechInventoryOb
     }
 
     @Override
-    public int getNextFuelBurnTime(boolean consume) {
+    public boolean canUseFuel() {
+        if (this.isEndgameDisabled()) {
+            return false;
+        }
         if (!AutoMinerConfig.isRequireFuel()) {
+            return true;
+        }
+        return super.canUseFuel();
+    }
+
+    @Override
+    public int getNextFuelBurnTime(boolean consume) {
+        if (this.isEndgameDisabled()) {
+            if (consume) {
+                this.burningFreeFuel = false;
+            }
+            return 0;
+        }
+        if (!AutoMinerConfig.isRequireFuel()) {
+            if (consume) {
+                this.burningFreeFuel = true;
+            }
             return this.getFuelTime(null);
         }
-        return super.getNextFuelBurnTime(consume);
+        int burnTime = this.itemToBurnTime(consume, (item) -> {
+            if (this.isValidFuelItem(item)) {
+                return this.getFuelTime(item);
+            }
+            return 0;
+        });
+        if (consume && burnTime > 0) {
+            this.burningFreeFuel = false;
+        }
+        return burnTime;
     }
 }

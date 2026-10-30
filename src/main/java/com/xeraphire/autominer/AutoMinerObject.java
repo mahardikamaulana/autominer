@@ -18,6 +18,7 @@ import necesse.gfx.drawOptions.texture.TextureDrawOptionsEnd;
 import necesse.gfx.drawables.LevelSortedDrawable;
 import necesse.gfx.drawables.OrderableDrawables;
 import necesse.gfx.gameTexture.GameTexture;
+import necesse.gfx.gameTooltips.ListGameTooltips;
 import necesse.inventory.InventoryItem;
 import necesse.inventory.InventoryRange;
 import necesse.inventory.container.object.CraftingStationContainer;
@@ -77,7 +78,7 @@ public class AutoMinerObject extends GameObject implements SettlementWorkstation
         super.tickEffect(level, layerID, x, y);
         if (GameRandom.globalRandom.nextInt(10) == 0) {
             AutoMinerObjectEntity entity = this.getAutoMinerObjectEntity(level, x, y);
-            if (entity != null && entity.isFuelRunning()) {
+            if (entity != null && !entity.isEndgameDisabled() && entity.isFuelRunning()) {
                 int startHeight = 16 + GameRandom.globalRandom.nextInt(16);
                 level.entityManager.addParticle(
                         (float)(x * 32 + GameRandom.globalRandom.getIntBetween(8, 24)),
@@ -98,6 +99,13 @@ public class AutoMinerObject extends GameObject implements SettlementWorkstation
     @Override
     public ObjectEntity getNewObjectEntity(Level level, int x, int y) {
         return new AutoMinerObjectEntity(level, this.definition, x, y, this.tech);
+    }
+
+    @Override
+    public ListGameTooltips getItemTooltips(InventoryItem item, PlayerMob perspective) {
+        ListGameTooltips tooltips = super.getItemTooltips(item, perspective);
+        tooltips.add(Localization.translate("itemtooltip", "autotip"));
+        return tooltips;
     }
 
     @Override
@@ -137,6 +145,9 @@ public class AutoMinerObject extends GameObject implements SettlementWorkstation
 
     @Override
     public boolean canCurrentlyCraft(Level level, int tileX, int tileY, Recipe recipe) {
+        if (this.definition != null && this.definition.isEndgame && !AutoMinerConfig.isEnableEndgameMiners()) {
+            return false;
+        }
         AutoMinerObjectEntity autoObj = this.getAutoMinerObjectEntity(level, tileX, tileY);
         if (autoObj != null) {
             return autoObj.getExpectedResults().crafts < 10 && (!AutoMinerConfig.isRequireFuel() || autoObj.isFuelRunning() || autoObj.canUseFuel());

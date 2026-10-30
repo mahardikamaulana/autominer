@@ -3,83 +3,71 @@ package com.xeraphire.autominer.settings;
 import necesse.engine.modLoader.ModSettings;
 
 public class AutoMinerConfig {
-    private static ModSettings activeSettings;
+    private static final AutoMinerSettings settings = new AutoMinerSettings();
+    private static final long SYNC_INTERVAL_NANOS = 250_000_000L; // 250ms throttle for hot-path tick reads
+    private static volatile long lastSyncNanos = 0L;
 
     public static ModSettings initSettings() {
-        try {
-            Class.forName("customsettingslib.settings.CustomModSettings");
-            activeSettings = (ModSettings) Class.forName("com.xeraphire.autominer.settings.AutoMinerCustomSettings")
-                    .getDeclaredConstructor().newInstance();
-        } catch (Throwable t) {
-            activeSettings = new AutoMinerFallbackSettings();
+        settings.autoSaveEnabled = true;
+        if (CustomSettingsLibBridge.tryRegisterSettings(settings)) {
+            ModSettings customSettings = CustomSettingsLibBridge.getCustomModSettings();
+            if (customSettings != null) {
+                return customSettings;
+            }
         }
-        return activeSettings;
+        return settings;
     }
 
-    public static ModSettings getActiveSettings() {
-        if (activeSettings == null) {
-            initSettings();
+    public static AutoMinerSettings getSettings() {
+        long now = System.nanoTime();
+        if (lastSyncNanos == 0L || now - lastSyncNanos >= SYNC_INTERVAL_NANOS) {
+            lastSyncNanos = now;
+            CustomSettingsLibBridge.syncFromCustomSettings(settings);
         }
-        return activeSettings;
+        return settings;
+    }
+
+    static void markSyncedNow() {
+        lastSyncNanos = System.nanoTime();
+    }
+
+    static void invalidateSyncTimer() {
+        lastSyncNanos = 0L;
     }
 
     public static boolean isCustomSettingsLibDetected() {
-        return !(getActiveSettings() instanceof AutoMinerFallbackSettings);
-    }
-
-    public static IAutoMinerSettings getSettings() {
-        ModSettings settings = getActiveSettings();
-        if (settings instanceof IAutoMinerSettings) {
-            return (IAutoMinerSettings) settings;
-        }
-        return null;
+        return CustomSettingsLibBridge.isAvailable();
     }
 
     public static boolean isRequireFuel() {
-        IAutoMinerSettings s = getSettings();
-        return s != null ? s.isRequireFuel() : true;
+        return getSettings().isRequireFuel();
     }
 
     public static int getMiningSpeed() {
-        IAutoMinerSettings s = getSettings();
-        return s != null ? s.getMiningSpeed() : 1;
+        return getSettings().getMiningSpeed();
     }
 
     public static int getFuelDuration() {
-        IAutoMinerSettings s = getSettings();
-        return s != null ? s.getFuelDuration() : 1;
+        return getSettings().getFuelDuration();
     }
 
     public static boolean isEnableEndgameMiners() {
-        IAutoMinerSettings s = getSettings();
-        return s != null ? s.isEnableEndgameMiners() : true;
+        return true;
     }
 
     public static void setRequireFuel(boolean requireFuel) {
-        IAutoMinerSettings s = getSettings();
-        if (s != null) {
-            s.setRequireFuel(requireFuel);
-        }
+        settings.setRequireFuel(requireFuel);
     }
 
     public static void setMiningSpeed(int speed) {
-        IAutoMinerSettings s = getSettings();
-        if (s != null) {
-            s.setMiningSpeed(speed);
-        }
+        settings.setMiningSpeed(speed);
     }
 
     public static void setFuelDuration(int duration) {
-        IAutoMinerSettings s = getSettings();
-        if (s != null) {
-            s.setFuelDuration(duration);
-        }
+        settings.setFuelDuration(duration);
     }
 
     public static void setEnableEndgameMiners(boolean enable) {
-        IAutoMinerSettings s = getSettings();
-        if (s != null) {
-            s.setEnableEndgameMiners(enable);
-        }
+        settings.setEnableEndgameMiners(true);
     }
 }

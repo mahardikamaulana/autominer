@@ -2,7 +2,7 @@
 
 ![Preview](src/main/resources/preview.png)
 
-An automated mining and resource generation mod for **Necesse** (v1.3.2+).
+An automated mining and resource generation mod for **Necesse** (v1.3.3+).
 
 Adds placeable automated miners for over 55 ores, gems, stone types, mob drops, and endgame crafting materials.
 
@@ -11,7 +11,7 @@ Adds placeable automated miners for over 55 ores, gems, stone types, mob drops, 
 - **55+ Automated Miners**: Covers early-game stones and ores up to endgame materials and shards.
 - **Tier-Based Unlocks**: Miners are crafted across progression workstations (Workstation, Demonic Workstation, Tungsten Workstation, Fallen Workstation).
 - **Configurable Fuel System**: Optional wood fuel requirement with configurable burn duration.
-- **Configurable Speed**: Adjustable mining speed multiplier (1x to 5x).
+- **Configurable Speed**: Adjustable mining speed multiplier (1x to 10x).
 - **In-Game Settings**: Configurable via [CustomSettingsLib](https://steamcommunity.com/sharedfiles/filedetails/?id=3440421710) GUI (`Settings` → `Mod Settings` → `AutoMiner`).
 - **Chat Command Fallback**: Control settings in-game via `/autominer` without extra mods.
 - **Multi-language Support**: English (`en`), Korean (`kr`), German (`de`), and Spanish (`es`).
@@ -33,7 +33,8 @@ Adds placeable automated miners for over 55 ores, gems, stone types, mob drops, 
 - **Deep & Glacial Ores**: Tungsten Ore, Obsidian, Glacial Ore, Glacial Shard, Ancient Fossil Ore, Mycelium Ore, Nightsteel Ore
 
 ### Tier 4: Fallen Workstation
-- **Endgame Materials**: Upgrade Shards, Alchemy Shards, Altar Dust, Omnicrystal
+- **Endgame Materials**: Upgrade Shards, Alchemy Shards, Altar Dust, Omnicrystal, Shadow Essence, Cryo Essence, Bio Essence, Primordial Essence, Crystal Essence, Radiated Essence, Pristine Gear, Fuel Skull, Ascended Crystal (Shard)
+- **High-Density Fuel**: Fuel Skulls can also be burned in any autominer for 5x the burn duration of standard logs!
 
 ## Configuration
 

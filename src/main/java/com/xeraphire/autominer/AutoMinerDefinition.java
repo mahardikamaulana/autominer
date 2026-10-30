@@ -16,6 +16,7 @@ public class AutoMinerDefinition {
     public final int ingredientAmount;
     public final String showAfter;
     public final int processTimeMs;
+    public final boolean isEndgame;
 
     public Tech tech;
     public AutoMinerObject object;
@@ -32,7 +33,8 @@ public class AutoMinerDefinition {
             String ingredientItem,
             int ingredientAmount,
             String showAfter,
-            int processTimeMs
+            int processTimeMs,
+            boolean isEndgame
     ) {
         this.stringID = stringID;
         this.texturePath = texturePath;
@@ -44,6 +46,22 @@ public class AutoMinerDefinition {
         this.ingredientAmount = ingredientAmount;
         this.showAfter = showAfter;
         this.processTimeMs = processTimeMs;
+        this.isEndgame = isEndgame;
+    }
+
+    public AutoMinerDefinition(
+            String stringID,
+            String texturePath,
+            String techID,
+            String craftedItem,
+            int craftedAmount,
+            Supplier<Tech> craftStation,
+            String ingredientItem,
+            int ingredientAmount,
+            String showAfter,
+            int processTimeMs
+    ) {
+        this(stringID, texturePath, techID, craftedItem, craftedAmount, craftStation, ingredientItem, ingredientAmount, showAfter, processTimeMs, processTimeMs >= 24000);
     }
 
     public AutoMinerDefinition(
@@ -57,7 +75,7 @@ public class AutoMinerDefinition {
             int ingredientAmount,
             String showAfter
     ) {
-        this(stringID, texturePath, techID, craftedItem, craftedAmount, craftStation, ingredientItem, ingredientAmount, showAfter, 8000);
+        this(stringID, texturePath, techID, craftedItem, craftedAmount, craftStation, ingredientItem, ingredientAmount, showAfter, 8000, false);
     }
 
     public static final AutoMinerDefinition[] DEFINITIONS = new AutoMinerDefinition[] {
@@ -153,6 +171,11 @@ public class AutoMinerDefinition {
         new AutoMinerDefinition("autominershadowessence", "objects/autominershadowessence", "AUTOMINERSHADOWESSENCETECH", "shadowessence", 1, () -> RecipeTechRegistry.getTech("fallen"), "shadowessence", 10, "automineromnicrystal", 24000),
         new AutoMinerDefinition("autominercryoessence", "objects/autominercryoessence", "AUTOMINERCRYOESSENCETECH", "cryoessence", 1, () -> RecipeTechRegistry.getTech("fallen"), "cryoessence", 10, "autominershadowessence", 24000),
         new AutoMinerDefinition("autominerbioessence", "objects/autominerbioessence", "AUTOMINERBIOESSENCETECH", "bioessence", 1, () -> RecipeTechRegistry.getTech("fallen"), "bioessence", 10, "autominercryoessence", 24000),
-        new AutoMinerDefinition("autominerprimordialessence", "objects/autominerprimordialessence", "AUTOMINERPRIMORDIALESSENCETECH", "primordialessence", 1, () -> RecipeTechRegistry.getTech("fallen"), "primordialessence", 10, "autominerbioessence", 24000)
+        new AutoMinerDefinition("autominerprimordialessence", "objects/autominerprimordialessence", "AUTOMINERPRIMORDIALESSENCETECH", "primordialessence", 1, () -> RecipeTechRegistry.getTech("fallen"), "primordialessence", 10, "autominerbioessence", 24000),
+        new AutoMinerDefinition("autominercrystalessence", "objects/autominercrystalessence", "AUTOMINERCRYSTALESSENCETECH", "crystalessence", 1, () -> RecipeTechRegistry.getTech("fallen"), "crystalessence", 10, "autominerprimordialessence", 24000),
+        new AutoMinerDefinition("autominerradiatedessence", "objects/autominerradiatedessence", "AUTOMINERRADIATEDESSENCETECH", "radiatedessence", 1, () -> RecipeTechRegistry.getTech("fallen"), "radiatedessence", 10, "autominercrystalessence", 24000),
+        new AutoMinerDefinition("autominerpristinegear", "objects/autominerpristinegear", "AUTOMINERPRISTINEGEARTECH", "pristinegear", 1, () -> RecipeTechRegistry.getTech("fallen"), "pristinegear", 15, "autominerradiatedessence", 24000),
+        new AutoMinerDefinition("autominerfuelskull", "objects/autominerfuelskull", "AUTOMINERFUELSKULLTECH", "fuelskull", 1, () -> RecipeTechRegistry.getTech("fallen"), "fuelskull", 10, "autominerpristinegear", 24000),
+        new AutoMinerDefinition("autominerascendedshard", "objects/autominerascendedshard", "AUTOMINERASCENDEDSHARDTECH", "ascendedshard", 1, () -> RecipeTechRegistry.getTech("fallen"), "ascendedshard", 5, "autominerfuelskull", 30000)
     };
 }
