@@ -4,11 +4,11 @@
 
 An automated mining and resource generation mod for **Necesse** (v1.3.3+).
 
-Adds placeable automated miners for over 55 ores, gems, stone types, mob drops, and endgame crafting materials.
+Adds placeable automated miners for 66 ores, gems, stone types, mob drops, and endgame crafting materials.
 
 ## Features
 
-- **55+ Automated Miners**: Covers early-game stones and ores up to endgame materials and shards.
+- **66 Automated Miners**: Covers early-game stones and ores up to endgame materials and shards.
 - **Tier-Based Unlocks**: Miners are crafted across progression workstations (Workstation, Demonic Workstation, Tungsten Workstation, Fallen Workstation).
 - **Configurable Fuel System**: Optional wood fuel requirement with configurable burn duration.
 - **Configurable Speed**: Adjustable mining speed multiplier (1x to 10x).
@@ -22,7 +22,7 @@ Adds placeable automated miners for over 55 ores, gems, stone types, mob drops, 
 - **Earth & Blocks**: Stone, Clay, Sand, Sandstone, Snowstone, Swampstone
 - **Ores**: Copper Ore, Iron Ore, Gold Ore, Frost Shards
 - **Gems**: Amethyst, Topaz, Emerald, Sapphire, Ruby, Diamond, Amber
-- **Mob Drops**: Bat Wing, Bone, Silk, Wool, Cloth Scraps
+- **Mob Drops**: Bat Wing, Bone, Silk, Wool, Cloth Scraps, Leather
 
 ### Tier 2: Demonic Workstation
 - **Minerals**: Ivy Ore, Quartz, Spiderite Ore, Life Quartz

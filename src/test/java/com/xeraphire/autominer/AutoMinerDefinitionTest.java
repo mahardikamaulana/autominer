@@ -30,7 +30,7 @@ class AutoMinerDefinitionTest {
     @DisplayName("DEFINITIONS array should not be empty and have expected count")
     void definitionsArrayNotEmpty() {
         assertNotNull(AutoMinerDefinition.DEFINITIONS);
-        assertEquals(65, AutoMinerDefinition.DEFINITIONS.length, "Expected 65 AutoMiner definitions");
+        assertEquals(66, AutoMinerDefinition.DEFINITIONS.length, "Expected 66 AutoMiner definitions");
     }
 
     @Test

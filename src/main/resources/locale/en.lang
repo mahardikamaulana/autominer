@@ -64,6 +64,7 @@ autominerradiatedessence=Radiated Essence Auto Miner
 autominerpristinegear=Pristine Gear Auto Miner
 autominerfuelskull=Fuel Skull Auto Miner
 autominerascendedshard=Ascended Crystal Auto Miner
+autominerleather=Leather Auto Miner
 
 [itemtooltip]
 autotip=Automatically mine ore from the ground

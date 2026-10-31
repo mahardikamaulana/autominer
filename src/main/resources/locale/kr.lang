@@ -64,6 +64,7 @@ autominerradiatedessence=방사능 정수 자동 채굴기
 autominerpristinegear=온전한 톱니바퀴 자동 채굴기
 autominerfuelskull=연료 해골 자동 채굴기
 autominerascendedshard=초월한 파편 자동 채굴기
+autominerleather=가죽 자동 채굴기
 
 [itemtooltip]
 autotip=지면에서 광석을 자동으로 채굴합니다

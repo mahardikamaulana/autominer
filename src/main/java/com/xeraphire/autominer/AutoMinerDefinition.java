@@ -112,6 +112,7 @@ public class AutoMinerDefinition {
         new AutoMinerDefinition("autominersilk", "objects/autominersilk", "AUTOMINERSILKTECH", "silk", 1, () -> RecipeTechRegistry.getTech("workstation"), "silk", 15, "autominerbone", 8000),
         new AutoMinerDefinition("autominerwool", "objects/WoolAM", "AUTOMINERWOOLTECH", "wool", 1, () -> RecipeTechRegistry.getTech("workstation"), "wool", 10, "autominersilk", 8000),
         new AutoMinerDefinition("autominerclothscraps", "objects/autominerclothscraps", "AUTOMINERCLOTHSCRAPSTECH", "clothscraps", 1, () -> RecipeTechRegistry.getTech("workstation"), "clothscraps", 15, "autominerwool", 8000),
+        new AutoMinerDefinition("autominerleather", "objects/autominerleather", "AUTOMINERLEATHERTECH", "leather", 1, () -> RecipeTechRegistry.getTech("workstation"), "leather", 10, "autominerclothscraps", 8000),
 
         // ==========================================
         // TIER 2: Demonic Workstation (Mid Game)

@@ -64,6 +64,7 @@ autominerradiatedessence=Minero Automático de Esencia Irradiada
 autominerpristinegear=Minero Automático de Engranaje en Perfecto Estado
 autominerfuelskull=Minero Automático de Calavera de Combustible
 autominerascendedshard=Minero Automático de Fragmento Ascendido
+autominerleather=Minero Automático de Cuero
 
 [itemtooltip]
 autotip=Extrae automáticamente el mineral del suelo
