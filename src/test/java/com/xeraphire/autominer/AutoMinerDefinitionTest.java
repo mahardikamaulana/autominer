@@ -30,7 +30,28 @@ class AutoMinerDefinitionTest {
     @DisplayName("DEFINITIONS array should not be empty and have expected count")
     void definitionsArrayNotEmpty() {
         assertNotNull(AutoMinerDefinition.DEFINITIONS);
-        assertEquals(66, AutoMinerDefinition.DEFINITIONS.length, "Expected 66 AutoMiner definitions");
+        assertEquals(75, AutoMinerDefinition.DEFINITIONS.length, "Expected 75 AutoMiner definitions");
+    }
+
+    @ParameterizedTest(name = "{index}: {0}")
+    @MethodSource("definitionProvider")
+    @DisplayName("Log miners are fuel-ratio locked, cost only saplings, and never beat planting per sapling")
+    void woodMinersBalanced(AutoMinerDefinition def) {
+        boolean producesLog = def.craftedItem.endsWith("log");
+        assertEquals(producesLog, def.isFuelRatioLocked(), "Only log miners may be fuel-ratio locked: " + def.stringID);
+        if (!producesLog) {
+            return;
+        }
+        assertEquals(AutoMinerDefinition.WOOD_LOG_RATIO, def.fuelLogRatio);
+        assertEquals(def.craftedItem.replace("log", "sapling"), def.ingredientItem, "Wood miner must cost its own sapling: " + def.stringID);
+        assertEquals(1, def.craftedAmount);
+
+        // Vanilla planting yield per sapling: 4.5 logs per ~37.5 min, Deadwood ~3 logs per ~52.5 min
+        double plantingLogsPerMinPerSapling = "deadwoodlog".equals(def.craftedItem) ? 3.0 / 52.5 : 4.5 / 37.5;
+        double minerNetLogsPerMin = def.fuelLogRatio - 1;
+        assertTrue(minerNetLogsPerMin > 0, "Wood miner must net positive wood: " + def.stringID);
+        assertTrue(minerNetLogsPerMin / def.ingredientAmount <= plantingLogsPerMinPerSapling,
+                "Wood miner out-produces planting the same saplings: " + def.stringID);
     }
 
     @Test
@@ -112,6 +133,12 @@ class AutoMinerDefinitionTest {
         File objectTexture = new File("src/main/resources/" + def.texturePath + ".png");
         assertTrue(objectTexture.isFile(), "Missing object texture file: " + objectTexture.getPath() + " for " + def.stringID);
         assertTrue(objectTexture.length() > 0, "Empty object texture file: " + objectTexture.getPath());
+
+        // Overlay miners build their item icon at runtime from the base body plus the game's own item icon
+        if (def.getIconOverlayTexture() != null) {
+            assertEquals("items/" + def.craftedItem, def.getIconOverlayTexture());
+            return;
+        }
 
         File itemTexture = new File("src/main/resources/items/" + def.stringID + ".png");
         assertTrue(itemTexture.isFile(), "Missing item texture file: " + itemTexture.getPath() + " for " + def.stringID);

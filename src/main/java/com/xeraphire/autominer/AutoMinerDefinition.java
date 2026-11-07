@@ -15,9 +15,41 @@ public class AutoMinerDefinition {
     public final int ingredientAmount;
     public final String showAfter;
     public final int processTimeMs;
+    // Logs produced per log burned; locks wood miners to a fixed ratio so speed settings can't mint free fuel
+    public final int fuelLogRatio;
 
     public Tech tech;
     public AutoMinerObject object;
+
+    public static final int WOOD_LOG_RATIO = 5;
+    // Icon-less miner body; the game's own item icon for craftedItem is drawn onto its panel at load time
+    public static final String WOOD_BASE_TEXTURE = "objects/autominerwoodbase";
+
+    public AutoMinerDefinition(
+            String stringID,
+            String texturePath,
+            String techID,
+            String craftedItem,
+            int craftedAmount,
+            Supplier<Tech> craftStation,
+            String ingredientItem,
+            int ingredientAmount,
+            String showAfter,
+            int processTimeMs,
+            int fuelLogRatio
+    ) {
+        this.stringID = stringID;
+        this.texturePath = texturePath;
+        this.techID = techID;
+        this.craftedItem = craftedItem;
+        this.craftedAmount = craftedAmount;
+        this.craftStation = craftStation;
+        this.ingredientItem = ingredientItem;
+        this.ingredientAmount = ingredientAmount;
+        this.showAfter = showAfter;
+        this.processTimeMs = processTimeMs;
+        this.fuelLogRatio = fuelLogRatio;
+    }
 
     public AutoMinerDefinition(
             String stringID,
@@ -31,16 +63,21 @@ public class AutoMinerDefinition {
             String showAfter,
             int processTimeMs
     ) {
-        this.stringID = stringID;
-        this.texturePath = texturePath;
-        this.techID = techID;
-        this.craftedItem = craftedItem;
-        this.craftedAmount = craftedAmount;
-        this.craftStation = craftStation;
-        this.ingredientItem = ingredientItem;
-        this.ingredientAmount = ingredientAmount;
-        this.showAfter = showAfter;
-        this.processTimeMs = processTimeMs;
+        this(stringID, texturePath, techID, craftedItem, craftedAmount, craftStation, ingredientItem, ingredientAmount, showAfter, processTimeMs, 0);
+    }
+
+    // Wood miner: costs only saplings and produces WOOD_LOG_RATIO logs per log burned (12s per log = 60s log burn / 5)
+    private static AutoMinerDefinition wood(String stringID, String log, String sapling, int saplingAmount, String station, String showAfter) {
+        return new AutoMinerDefinition(stringID, WOOD_BASE_TEXTURE, stringID.toUpperCase() + "TECH", log, 1, () -> RecipeTechRegistry.getTech(station), sapling, saplingAmount, showAfter, 12000, WOOD_LOG_RATIO);
+    }
+
+    public boolean isFuelRatioLocked() {
+        return this.fuelLogRatio > 0;
+    }
+
+    // Game item texture to overlay on the shared base body, or null when the miner ships its own sprite
+    public String getIconOverlayTexture() {
+        return WOOD_BASE_TEXTURE.equals(this.texturePath) ? "items/" + this.craftedItem : null;
     }
 
     public AutoMinerDefinition(
@@ -93,6 +130,15 @@ public class AutoMinerDefinition {
         new AutoMinerDefinition("autominerclothscraps", "objects/autominerclothscraps", "AUTOMINERCLOTHSCRAPSTECH", "clothscraps", 1, () -> RecipeTechRegistry.getTech("workstation"), "clothscraps", 15, "autominerwool", 8000),
         new AutoMinerDefinition("autominerleather", "objects/autominerleather", "AUTOMINERLEATHERTECH", "leather", 1, () -> RecipeTechRegistry.getTech("workstation"), "leather", 10, "autominerclothscraps", 8000),
 
+        // 5. Wood & Timber (Output: 1, Process: fuel-locked 5 logs per log burned, Cost: saplings only)
+        wood("automineroaklog", "oaklog", "oaksapling", 40, "workstation", "autominerstone"),
+        wood("autominerbirchlog", "birchlog", "birchsapling", 40, "workstation", "automineroaklog"),
+        wood("autominermaplelog", "maplelog", "maplesapling", 40, "workstation", "autominerbirchlog"),
+        wood("autominersprucelog", "sprucelog", "sprucesapling", 40, "workstation", "autominermaplelog"),
+        wood("autominerpinelog", "pinelog", "pinesapling", 40, "workstation", "autominersprucelog"),
+        wood("autominerpalmlog", "palmlog", "palmsapling", 40, "workstation", "autominerpinelog"),
+        wood("autominerwillowlog", "willowlog", "willowsapling", 40, "workstation", "autominerpalmlog"),
+
         // ==========================================
         // TIER 2: Demonic Workstation (Mid Game)
         // ==========================================
@@ -116,6 +162,10 @@ public class AutoMinerDefinition {
         new AutoMinerDefinition("autominercavespidergland", "objects/autominercavespidergland", "AUTOMINERCAVESPIDERGLANDTECH", "cavespidergland", 1, () -> RecipeTechRegistry.getTech("demonic"), "cavespidergland", 15, "autominerspidervenom", 12000),
         new AutoMinerDefinition("autominerspiderstone", "objects/autominerspiderstone", "AUTOMINERSPIDERSTONETECH", "spiderstone", 1, () -> RecipeTechRegistry.getTech("demonic"), "spiderstone", 10, "autominercavespidergland", 12000),
         new AutoMinerDefinition("autominerwormcarapace", "objects/autominerwormcarapace", "AUTOMINERWORMCARAPACETECH", "wormcarapace", 1, () -> RecipeTechRegistry.getTech("demonic"), "wormcarapace", 15, "autominerspiderstone", 12000),
+
+        // 3. Exotic Wood (Output: 1, fuel-locked; Deadwood trees farm ~half as fast, so it costs more saplings)
+        wood("autominerdryadlog", "dryadlog", "dryadsapling", 40, "demonic", "autominerwormcarapace"),
+        wood("autominerdeadwoodlog", "deadwoodlog", "deadwoodsapling", 90, "demonic", "autominerdryadlog"),
 
         // ==========================================
         // TIER 3: Tungsten Workstation (Deep Caves)

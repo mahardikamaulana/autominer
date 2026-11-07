@@ -65,6 +65,15 @@ autominerpristinegear=Makellose-Ausrüstung-Auto-Miner
 autominerfuelskull=Treibstoffschädel-Auto-Miner
 autominerascendedshard=Aufgestiegene-Essenz-Auto-Miner
 autominerleather=Leder-Auto-Miner
+automineroaklog=Eichenstamm-Auto-Miner
+autominerbirchlog=Birkenstamm-Auto-Miner
+autominermaplelog=Ahornstamm-Auto-Miner
+autominersprucelog=Fichtenstamm-Auto-Miner
+autominerpinelog=Kiefernstamm-Auto-Miner
+autominerpalmlog=Palmenstamm-Auto-Miner
+autominerwillowlog=Weidenstamm-Auto-Miner
+autominerdryadlog=Dryadenstamm-Auto-Miner
+autominerdeadwoodlog=Totholzstamm-Auto-Miner
 
 [itemtooltip]
 autotip=Baut automatisch Erz aus dem Boden ab

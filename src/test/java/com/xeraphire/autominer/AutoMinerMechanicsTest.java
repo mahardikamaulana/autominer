@@ -113,6 +113,42 @@ class AutoMinerMechanicsTest {
         assertEquals(4000, entity.getProcessTime(null));
     }
 
+    private static AutoMinerDefinition findDefinition(String stringID) {
+        for (AutoMinerDefinition def : AutoMinerDefinition.DEFINITIONS) {
+            if (def.stringID.equals(stringID)) {
+                return def;
+            }
+        }
+        throw new IllegalArgumentException(stringID);
+    }
+
+    @ParameterizedTest(name = "speed={0}x, fuelDuration={1}x")
+    @CsvSource({
+            "1, 1", "10, 1", "1, 10", "10, 10", "3, 7", "7, 3"
+    })
+    @DisplayName("Wood miners yield exactly WOOD_LOG_RATIO logs per log burned regardless of settings")
+    void woodMinerFuelRatioLocked(int speed, int duration) throws Exception {
+        AutoMinerObjectEntity entity = allocateEntity(findDefinition("automineroaklog"));
+        AutoMinerConfig.setMiningSpeed(speed);
+        AutoMinerConfig.setFuelDuration(duration);
+
+        int logsPerLogBurned = entity.getFuelTime(null) / entity.getProcessTime(null);
+        assertEquals(AutoMinerDefinition.WOOD_LOG_RATIO, logsPerLogBurned);
+        assertEquals(0, entity.getFuelTime(null) % entity.getProcessTime(null));
+    }
+
+    @ParameterizedTest(name = "speed={0}x -> {1}ms")
+    @CsvSource({"1, 12000", "2, 6000", "10, 1200"})
+    @DisplayName("Wood miners use the normal speed multiplier when fuel is not required")
+    void woodMinerSpeedWhenFuelFree(int speed, int expectedMs) throws Exception {
+        AutoMinerObjectEntity entity = allocateEntity(findDefinition("automineroaklog"));
+        AutoMinerConfig.setRequireFuel(false);
+        AutoMinerConfig.setMiningSpeed(speed);
+        AutoMinerConfig.setFuelDuration(10);
+
+        assertEquals(expectedMs, entity.getProcessTime(null));
+    }
+
     private InventoryItem allocateInventoryItem(String itemStringID) throws Exception {
         Item item = mock(Item.class);
         when(item.getStringID()).thenReturn(itemStringID);

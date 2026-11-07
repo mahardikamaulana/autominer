@@ -65,6 +65,15 @@ autominerpristinegear=Pristine Gear Auto Miner
 autominerfuelskull=Fuel Skull Auto Miner
 autominerascendedshard=Ascended Crystal Auto Miner
 autominerleather=Leather Auto Miner
+automineroaklog=Oak Log Auto Miner
+autominerbirchlog=Birch Log Auto Miner
+autominermaplelog=Maple Log Auto Miner
+autominersprucelog=Spruce Log Auto Miner
+autominerpinelog=Pine Log Auto Miner
+autominerpalmlog=Palm Log Auto Miner
+autominerwillowlog=Willow Log Auto Miner
+autominerdryadlog=Dryad Log Auto Miner
+autominerdeadwoodlog=Deadwood Log Auto Miner
 
 [itemtooltip]
 autotip=Automatically mine ore from the ground

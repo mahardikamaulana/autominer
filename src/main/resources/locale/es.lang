@@ -65,6 +65,15 @@ autominerpristinegear=Minero Automático de Engranaje en Perfecto Estado
 autominerfuelskull=Minero Automático de Calavera de Combustible
 autominerascendedshard=Minero Automático de Fragmento Ascendido
 autominerleather=Minero Automático de Cuero
+automineroaklog=Minero Automático de Tronco de Roble
+autominerbirchlog=Minero Automático de Tronco de Abedul
+autominermaplelog=Minero Automático de Tronco de Arce
+autominersprucelog=Minero Automático de Tronco de Abeto
+autominerpinelog=Minero Automático de Tronco de Pino
+autominerpalmlog=Minero Automático de Tronco de Palmera
+autominerwillowlog=Minero Automático de Tronco de Sauce
+autominerdryadlog=Minero Automático de Tronco de Dríade
+autominerdeadwoodlog=Minero Automático de Tronco de Madera Muerta
 
 [itemtooltip]
 autotip=Extrae automáticamente el mineral del suelo
