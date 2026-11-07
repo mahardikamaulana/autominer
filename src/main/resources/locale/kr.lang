@@ -65,6 +65,15 @@ autominerpristinegear=온전한 톱니바퀴 자동 채굴기
 autominerfuelskull=연료 해골 자동 채굴기
 autominerascendedshard=초월한 파편 자동 채굴기
 autominerleather=가죽 자동 채굴기
+automineroaklog=참나무 통나무 자동 채굴기
+autominerbirchlog=자작나무 통나무 자동 채굴기
+autominermaplelog=단풍나무 통나무 자동 채굴기
+autominersprucelog=가문비나무 통나무 자동 채굴기
+autominerpinelog=소나무 통나무 자동 채굴기
+autominerpalmlog=야자나무 통나무 자동 채굴기
+autominerwillowlog=버드나무 통나무 자동 채굴기
+autominerdryadlog=드라이어드 통나무 자동 채굴기
+autominerdeadwoodlog=고사목 통나무 자동 채굴기
 
 [itemtooltip]
 autotip=지면에서 광석을 자동으로 채굴합니다

@@ -18,6 +18,7 @@ import necesse.gfx.drawOptions.texture.TextureDrawOptionsEnd;
 import necesse.gfx.drawables.LevelSortedDrawable;
 import necesse.gfx.drawables.OrderableDrawables;
 import necesse.gfx.gameTexture.GameTexture;
+import necesse.gfx.gameTexture.MergeFunction;
 import necesse.gfx.gameTooltips.ListGameTooltips;
 import necesse.inventory.InventoryItem;
 import necesse.inventory.InventoryRange;
@@ -53,10 +54,32 @@ public class AutoMinerObject extends GameObject implements SettlementWorkstation
         this.isLightTransparent = false;
     }
 
+    // Panel area on the base body (x 7-25, y 40-58) that holds the resource icon
+    private static final int ICON_X = 8;
+    private static final int ICON_Y = 41;
+    private static final int ICON_SIZE = 16;
+
     @Override
     public void loadTextures() {
         super.loadTextures();
-        this.texture = GameTexture.fromFile(this.definition.texturePath);
+        this.texture = this.buildTexture();
+    }
+
+    @Override
+    public GameTexture generateItemTexture() {
+        return this.definition.getIconOverlayTexture() != null ? this.buildTexture() : super.generateItemTexture();
+    }
+
+    private GameTexture buildTexture() {
+        String overlay = this.definition.getIconOverlayTexture();
+        if (overlay == null) {
+            return GameTexture.fromFile(this.definition.texturePath);
+        }
+        // Composite the vanilla item icon at runtime so the mod doesn't ship copies of game art
+        GameTexture composite = new GameTexture(GameTexture.fromFile(this.definition.texturePath, true));
+        GameTexture icon = GameTexture.fromFile(overlay, true).resize(ICON_SIZE, ICON_SIZE);
+        composite.merge(icon, ICON_X, ICON_Y, MergeFunction.NORMAL);
+        return composite.makeFinal();
     }
 
     @Override

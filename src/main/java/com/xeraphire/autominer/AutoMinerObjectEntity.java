@@ -54,6 +54,11 @@ public class AutoMinerObjectEntity extends AnyLogFueledProcessingTechInventoryOb
 
     @Override
     public int getProcessTime(Recipe recipe) {
+        if (this.definition != null && this.definition.isFuelRatioLocked() && AutoMinerConfig.isRequireFuel()) {
+            // Tie output to fuel burn so wood miners always yield exactly fuelLogRatio logs per log, whatever the settings
+            int duration = Math.max(1, AutoMinerConfig.getFuelDuration());
+            return Math.max(50, logFuelTime * duration / this.definition.fuelLogRatio);
+        }
         int baseTime = this.definition != null ? this.definition.processTimeMs : defaultRecipeProcessTime;
         int speed = Math.max(1, AutoMinerConfig.getMiningSpeed());
         return Math.max(50, baseTime / speed);
