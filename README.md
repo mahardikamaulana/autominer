@@ -34,7 +34,7 @@ Adds placeable automated miners for 66 ores, gems, stone types, mob drops, and e
 
 ### Tier 4: Fallen Workstation
 - **Endgame Materials**: Upgrade Shards, Alchemy Shards, Altar Dust, Omnicrystal, Shadow Essence, Cryo Essence, Bio Essence, Primordial Essence, Crystal Essence, Radiated Essence, Pristine Gear, Fuel Skull, Ascended Crystal (Shard)
-- **High-Density Fuel**: Fuel Skulls can also be burned in any autominer for 5x the burn duration of standard logs!
+- **High-Density Fuel**: Fuel Skulls can also be burned in any autominer for 2x the burn duration of standard logs!
 
 ## Configuration
 

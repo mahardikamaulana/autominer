@@ -2,7 +2,6 @@ package com.xeraphire.autominer;
 
 import java.util.function.Supplier;
 import necesse.engine.registries.RecipeTechRegistry;
-import necesse.inventory.recipe.Recipe;
 import necesse.inventory.recipe.Tech;
 
 public class AutoMinerDefinition {
@@ -16,38 +15,9 @@ public class AutoMinerDefinition {
     public final int ingredientAmount;
     public final String showAfter;
     public final int processTimeMs;
-    public final boolean isEndgame;
 
     public Tech tech;
     public AutoMinerObject object;
-    public Recipe productionRecipe;
-    public Recipe stationRecipe;
-
-    public AutoMinerDefinition(
-            String stringID,
-            String texturePath,
-            String techID,
-            String craftedItem,
-            int craftedAmount,
-            Supplier<Tech> craftStation,
-            String ingredientItem,
-            int ingredientAmount,
-            String showAfter,
-            int processTimeMs,
-            boolean isEndgame
-    ) {
-        this.stringID = stringID;
-        this.texturePath = texturePath;
-        this.techID = techID;
-        this.craftedItem = craftedItem;
-        this.craftedAmount = craftedAmount;
-        this.craftStation = craftStation;
-        this.ingredientItem = ingredientItem;
-        this.ingredientAmount = ingredientAmount;
-        this.showAfter = showAfter;
-        this.processTimeMs = processTimeMs;
-        this.isEndgame = isEndgame;
-    }
 
     public AutoMinerDefinition(
             String stringID,
@@ -61,7 +31,16 @@ public class AutoMinerDefinition {
             String showAfter,
             int processTimeMs
     ) {
-        this(stringID, texturePath, techID, craftedItem, craftedAmount, craftStation, ingredientItem, ingredientAmount, showAfter, processTimeMs, processTimeMs >= 24000);
+        this.stringID = stringID;
+        this.texturePath = texturePath;
+        this.techID = techID;
+        this.craftedItem = craftedItem;
+        this.craftedAmount = craftedAmount;
+        this.craftStation = craftStation;
+        this.ingredientItem = ingredientItem;
+        this.ingredientAmount = ingredientAmount;
+        this.showAfter = showAfter;
+        this.processTimeMs = processTimeMs;
     }
 
     public AutoMinerDefinition(
@@ -75,7 +54,7 @@ public class AutoMinerDefinition {
             int ingredientAmount,
             String showAfter
     ) {
-        this(stringID, texturePath, techID, craftedItem, craftedAmount, craftStation, ingredientItem, ingredientAmount, showAfter, 8000, false);
+        this(stringID, texturePath, techID, craftedItem, craftedAmount, craftStation, ingredientItem, ingredientAmount, showAfter, 8000);
     }
 
     public static final AutoMinerDefinition[] DEFINITIONS = new AutoMinerDefinition[] {

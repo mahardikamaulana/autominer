@@ -51,10 +51,6 @@ public class AutoMinerConfig {
         return getSettings().getFuelDuration();
     }
 
-    public static boolean isEnableEndgameMiners() {
-        return true;
-    }
-
     public static void setRequireFuel(boolean requireFuel) {
         settings.setRequireFuel(requireFuel);
     }
@@ -65,9 +61,5 @@ public class AutoMinerConfig {
 
     public static void setFuelDuration(int duration) {
         settings.setFuelDuration(duration);
-    }
-
-    public static void setEnableEndgameMiners(boolean enable) {
-        settings.setEnableEndgameMiners(true);
     }
 }

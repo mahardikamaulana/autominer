@@ -49,12 +49,10 @@ public class AutoMiner {
                 stationRecipe.showAfter(def.showAfter);
             }
             Recipes.registerModRecipe(stationRecipe);
-            def.stationRecipe = stationRecipe;
 
             // Recipe for the Auto Miner station to produce the resource
             Recipe productionRecipe = new Recipe(def.craftedItem, def.craftedAmount, def.tech, new Ingredient[0]);
             Recipes.registerModRecipe(productionRecipe);
-            def.productionRecipe = productionRecipe;
             if (def.object != null) {
                 def.object.productionRecipe = productionRecipe;
             }

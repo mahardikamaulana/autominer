@@ -35,7 +35,6 @@ class AutoMinerChatCommandTest {
         AutoMinerConfig.setRequireFuel(true);
         AutoMinerConfig.setMiningSpeed(1);
         AutoMinerConfig.setFuelDuration(1);
-        AutoMinerConfig.setEnableEndgameMiners(true);
 
         command = new AutoMinerChatCommand();
         client = mock(Client.class);
@@ -52,7 +51,6 @@ class AutoMinerChatCommandTest {
         AutoMinerConfig.setRequireFuel(true);
         AutoMinerConfig.setMiningSpeed(1);
         AutoMinerConfig.setFuelDuration(1);
-        AutoMinerConfig.setEnableEndgameMiners(true);
     }
 
     private ArrayList<String> argsOf(String... items) {
@@ -168,16 +166,6 @@ class AutoMinerChatCommandTest {
         AutoMinerConfig.setRequireFuel(true);
         assertFalse(command.run(client, server, serverClient, argsOf("requirefuel", invalidBool), log));
         assertTrue(AutoMinerConfig.isRequireFuel());
-    }
-
-    @Test
-    @DisplayName("endgame subcommand reports endgame miners always available")
-    void endgameSubcommand() {
-        assertTrue(command.run(client, server, serverClient, argsOf("endgame", "false"), log));
-        assertTrue(AutoMinerConfig.isEnableEndgameMiners());
-
-        assertTrue(command.run(client, server, serverClient, argsOf("endgame", "true"), log));
-        assertTrue(AutoMinerConfig.isEnableEndgameMiners());
     }
 
     @Test

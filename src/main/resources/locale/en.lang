@@ -68,7 +68,6 @@ autominerleather=Leather Auto Miner
 
 [itemtooltip]
 autotip=Automatically mine ore from the ground
-endgamedisabled=Disabled in server settings (Endgame Miners OFF)
 
 [settingsui]
 generalsection=General Configuration
@@ -76,5 +75,3 @@ requireFuel=Require Wood Log Fuel
 miningSpeed=Mining Speed Multiplier
 fuelDuration=Fuel Duration Multiplier
 
-balancesection=Progression & Balance
-enableEndgameMiners=Enable Endgame Miners (Shards/Omnicrystal)

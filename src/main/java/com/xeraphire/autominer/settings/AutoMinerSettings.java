@@ -10,7 +10,6 @@ public class AutoMinerSettings extends ModSettings implements IAutoMinerSettings
     public volatile boolean requireFuel = true;
     public volatile int miningSpeed = 1;
     public volatile int fuelDuration = 1;
-    public volatile boolean enableEndgameMiners = true;
     public volatile boolean autoSaveEnabled = false;
 
     @Override
@@ -28,25 +27,19 @@ public class AutoMinerSettings extends ModSettings implements IAutoMinerSettings
         return fuelDuration;
     }
 
-    @Override
-    public boolean isEnableEndgameMiners() {
-        return true;
-    }
-
+    // Same keys and layout as the CustomSettingsLib settings, so both writers produce an identical cfg file
     @Override
     public void addSaveData(SaveData save) {
         save.addBoolean("requireFuel", requireFuel);
         save.addInt("miningSpeed", miningSpeed);
         save.addInt("fuelDuration", fuelDuration);
-        save.addBoolean("enableEndgameMiners", true);
     }
 
     @Override
     public void applyLoadData(LoadData save) {
-        requireFuel = save.getBoolean("requireFuel", true);
+        requireFuel = save.getBoolean("requireFuel", requireFuel);
         miningSpeed = Math.max(1, Math.min(10, save.getInt("miningSpeed", miningSpeed)));
         fuelDuration = Math.max(1, Math.min(10, save.getInt("fuelDuration", fuelDuration)));
-        enableEndgameMiners = true;
         CustomSettingsLibBridge.syncToCustomSettings(this);
     }
 
@@ -89,13 +82,6 @@ public class AutoMinerSettings extends ModSettings implements IAutoMinerSettings
     @Override
     public void setFuelDuration(int duration) {
         this.fuelDuration = Math.max(1, Math.min(10, duration));
-        CustomSettingsLibBridge.syncToCustomSettings(this);
-        saveIfEnabled();
-    }
-
-    @Override
-    public void setEnableEndgameMiners(boolean enable) {
-        this.enableEndgameMiners = true;
         CustomSettingsLibBridge.syncToCustomSettings(this);
         saveIfEnabled();
     }

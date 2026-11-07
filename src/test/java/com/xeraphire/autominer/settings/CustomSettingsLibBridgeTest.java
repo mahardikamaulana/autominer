@@ -42,7 +42,6 @@ class CustomSettingsLibBridgeTest {
         settings.requireFuel = false;
         settings.miningSpeed = 4;
         settings.fuelDuration = 6;
-        settings.enableEndgameMiners = false;
 
         if (!available) {
             assertFalse(CustomSettingsLibBridge.tryRegisterSettings(settings));
@@ -104,6 +103,70 @@ class CustomSettingsLibBridgeTest {
         assertEquals(4, settings.getFuelDuration());
     }
 
+    @Test
+    @DisplayName("In-game, server-synced values win over the client's local CustomSettingsLib values")
+    void serverDataPreferredInGame() throws Exception {
+        SimulatedCustomModSettings simulated = injectSimulatedInstance();
+        simulated.serverDataSettings.put("requireFuel", false);
+        simulated.serverDataSettings.put("miningSpeed", 7);
+        simulated.serverDataSettings.put("fuelDuration", 3);
+        AutoMinerSettings settings = new AutoMinerSettings();
+
+        // In the main menu the local values apply
+        simulated.inGame = false;
+        CustomSettingsLibBridge.syncFromCustomSettings(settings);
+        assertTrue(settings.isRequireFuel());
+        assertEquals(1, settings.getMiningSpeed());
+        assertEquals(1, settings.getFuelDuration());
+
+        // Joined to a server: follow the server's values
+        simulated.inGame = true;
+        CustomSettingsLibBridge.syncFromCustomSettings(settings);
+        assertFalse(settings.isRequireFuel());
+        assertEquals(7, settings.getMiningSpeed());
+        assertEquals(3, settings.getFuelDuration());
+
+        // In-game before the server packet arrives: fall back to the local values
+        simulated.serverDataSettings.clear();
+        CustomSettingsLibBridge.syncFromCustomSettings(settings);
+        assertTrue(settings.isRequireFuel());
+        assertEquals(1, settings.getMiningSpeed());
+        assertEquals(1, settings.getFuelDuration());
+    }
+
+    @Test
+    @DisplayName("GUI Save applies the newly committed values immediately, matching CSL's listener-before-onSave order")
+    void onSavedListenerSeesCommittedValues() throws Exception {
+        SimulatedCustomModSettings simulated = injectSimulatedInstance();
+        try {
+            assertEquals(1, AutoMinerConfig.getMiningSpeed()); // initial pull marks the throttle as synced
+
+            // CustomModSettingsForm save button: listeners run first, then onSave() commits the GUI values
+            CustomSettingsLibBridge.createOnSavedListener().run();
+            simulated.settingsMap.get("requireFuel").value = false;
+            simulated.settingsMap.get("miningSpeed").value = 5;
+            simulated.settingsMap.get("fuelDuration").value = 3;
+
+            // Visible on the next read, without waiting out the 250ms throttle
+            assertFalse(AutoMinerConfig.isRequireFuel());
+            assertEquals(5, AutoMinerConfig.getMiningSpeed());
+            assertEquals(3, AutoMinerConfig.getFuelDuration());
+        } finally {
+            CustomSettingsLibBridge.resetCache();
+            AutoMinerConfig.setRequireFuel(true);
+            AutoMinerConfig.setMiningSpeed(1);
+            AutoMinerConfig.setFuelDuration(1);
+        }
+    }
+
+    private static SimulatedCustomModSettings injectSimulatedInstance() throws Exception {
+        SimulatedCustomModSettings simulated = new SimulatedCustomModSettings();
+        Field instanceField = CustomSettingsLibBridge.class.getDeclaredField("customSettingsInstance");
+        instanceField.setAccessible(true);
+        instanceField.set(null, simulated);
+        return simulated;
+    }
+
     public static class SimulatedSetting {
         protected Object value;
 
@@ -119,11 +182,22 @@ class CustomSettingsLibBridgeTest {
     public static class SimulatedCustomModSettings extends ModSettings {
         public final Map<String, Object> serverDataSettings = new java.util.HashMap<>();
         public final Map<String, SimulatedSetting> settingsMap = new java.util.HashMap<>();
+        public final java.util.List<String> serverSettings = java.util.List.of("requireFuel", "miningSpeed", "fuelDuration");
+        public boolean inGame = false;
 
         public SimulatedCustomModSettings() {
             settingsMap.put("requireFuel", new SimulatedSetting(true));
             settingsMap.put("miningSpeed", new SimulatedSetting(1));
             settingsMap.put("fuelDuration", new SimulatedSetting(1));
+        }
+
+        // Mirrors CustomModSettings.getSetting: server settings come from serverDataSettings while in-game
+        public Object getSetting(String settingID) {
+            if (serverSettings.contains(settingID) && inGame) {
+                return serverDataSettings.get(settingID);
+            }
+            SimulatedSetting setting = settingsMap.get(settingID);
+            return setting != null ? setting.getValue() : null;
         }
 
         @Override

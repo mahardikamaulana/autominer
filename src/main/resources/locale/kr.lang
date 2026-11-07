@@ -68,7 +68,6 @@ autominerleather=가죽 자동 채굴기
 
 [itemtooltip]
 autotip=지면에서 광석을 자동으로 채굴합니다
-endgamedisabled=서버 설정에서 비활성화됨 (엔드게임 채굴기 꺼짐)
 
 [settingsui]
 generalsection=일반 설정
@@ -76,5 +75,3 @@ requireFuel=통나무 연료 요구
 miningSpeed=채굴 속도 배율
 fuelDuration=연료 지속 시간 배율
 
-balancesection=진행 및 밸런스
-enableEndgameMiners=엔드게임 채굴기 활성화 (파편/옴니크리스탈)

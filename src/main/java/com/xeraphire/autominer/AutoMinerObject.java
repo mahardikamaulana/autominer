@@ -35,6 +35,11 @@ import necesse.level.maps.levelData.settlementData.storage.SettlementStorageReco
 import necesse.level.maps.light.GameLight;
 
 public class AutoMinerObject extends GameObject implements SettlementWorkstationObject {
+    // Settlers queue at most MAX_CRAFTS_PER_REQUEST crafts per job, and stop queueing once
+    // MAX_QUEUED_CRAFTS are pending, so up to two job batches can be buffered per miner
+    public static final int MAX_CRAFTS_PER_REQUEST = 5;
+    public static final int MAX_QUEUED_CRAFTS = 10;
+
     public final AutoMinerDefinition definition;
     public final Tech tech;
     public GameTexture texture;
@@ -78,7 +83,7 @@ public class AutoMinerObject extends GameObject implements SettlementWorkstation
         super.tickEffect(level, layerID, x, y);
         if (GameRandom.globalRandom.nextInt(10) == 0) {
             AutoMinerObjectEntity entity = this.getAutoMinerObjectEntity(level, x, y);
-            if (entity != null && !entity.isEndgameDisabled() && entity.isFuelRunning()) {
+            if (entity != null && entity.isFuelRunning()) {
                 int startHeight = 16 + GameRandom.globalRandom.nextInt(16);
                 level.entityManager.addParticle(
                         (float)(x * 32 + GameRandom.globalRandom.getIntBetween(8, 24)),
@@ -145,12 +150,9 @@ public class AutoMinerObject extends GameObject implements SettlementWorkstation
 
     @Override
     public boolean canCurrentlyCraft(Level level, int tileX, int tileY, Recipe recipe) {
-        if (this.definition != null && this.definition.isEndgame && !AutoMinerConfig.isEnableEndgameMiners()) {
-            return false;
-        }
         AutoMinerObjectEntity autoObj = this.getAutoMinerObjectEntity(level, tileX, tileY);
         if (autoObj != null) {
-            return autoObj.getExpectedResults().crafts < 10 && (!AutoMinerConfig.isRequireFuel() || autoObj.isFuelRunning() || autoObj.canUseFuel());
+            return autoObj.getExpectedResults().crafts < MAX_QUEUED_CRAFTS && (!AutoMinerConfig.isRequireFuel() || autoObj.isFuelRunning() || autoObj.canUseFuel());
         }
         return false;
     }
@@ -165,7 +167,7 @@ public class AutoMinerObject extends GameObject implements SettlementWorkstation
 
     @Override
     public int getMaxCraftsAtOnce(Level level, int tileX, int tileY, Recipe recipe) {
-        return 5;
+        return MAX_CRAFTS_PER_REQUEST;
     }
 
     @Override

@@ -68,7 +68,6 @@ autominerleather=Leder-Auto-Miner
 
 [itemtooltip]
 autotip=Baut automatisch Erz aus dem Boden ab
-endgamedisabled=In den Servereinstellungen deaktiviert (Endspiel-Miner AUS)
 
 [settingsui]
 generalsection=Allgemeine Konfiguration
@@ -76,5 +75,3 @@ requireFuel=Holz-Brennstoff erforderlich
 miningSpeed=Abbau-Geschwindigkeitsmultiplikator
 fuelDuration=Brenndauer-Multiplikator
 
-balancesection=Fortschritt & Balance
-enableEndgameMiners=Endspiel-Miner aktivieren (Splitter/Omnikristall)

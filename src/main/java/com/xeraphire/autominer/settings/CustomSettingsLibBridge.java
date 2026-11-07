@@ -4,7 +4,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import necesse.engine.network.Packet;
+import necesse.engine.network.server.Server;
 
 /**
  * Isolated dynamic reflection bridge for CustomSettingsLib (Mod Settings Lib).
@@ -15,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CustomSettingsLibBridge {
 
     private static final String CUSTOM_SETTINGS_CLASS = "customsettingslib.settings.CustomModSettings";
+    private static final String SERVER_SETTINGS_PACKET_CLASS = "customsettingslib.packets.PacketReadServerSettings";
     private static volatile Boolean isAvailableCache = null;
     private static final Object LOCK = new Object();
     private static volatile Object customSettingsInstance = null;
@@ -25,6 +29,8 @@ public class CustomSettingsLibBridge {
     private static volatile Field cachedServerDataField = null;
     private static final ConcurrentHashMap<Class<?>, Method> GET_VALUE_METHODS = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Class<?>, Field> VALUE_FIELDS = new ConcurrentHashMap<>();
+    // CustomModSettings.getSetting(String); empty when the instance class has no such method
+    private static final ConcurrentHashMap<Class<?>, Optional<Method>> GET_SETTING_METHODS = new ConcurrentHashMap<>();
     private static volatile boolean loggedSyncError = false;
 
     /**
@@ -74,19 +80,8 @@ public class CustomSettingsLibBridge {
         try {
             Class<?> customModSettingsClass = Class.forName(CUSTOM_SETTINGS_CLASS, false, CustomSettingsLibBridge.class.getClassLoader());
 
-            // Callback when player hits Save in CustomSettingsLib GUI
-            Runnable onSavedListener = () -> {
-                try {
-                    syncFromCustomSettings(settings);
-                    syncToCustomSettings(settings);
-                    settings.save();
-                } catch (Exception | LinkageError t) {
-                    System.err.println("[AutoMiner] Error reading settings from CustomSettingsLib GUI: " + t.getMessage());
-                }
-            };
-
             Constructor<?> constructor = customModSettingsClass.getConstructor(Runnable.class);
-            customSettingsInstance = constructor.newInstance(onSavedListener);
+            customSettingsInstance = constructor.newInstance(createOnSavedListener());
 
             // addServerSettings(String... serverSettingsIDs)
             Method addServerSettingsMethod = customModSettingsClass.getMethod("addServerSettings", String[].class);
@@ -108,13 +103,21 @@ public class CustomSettingsLibBridge {
             addIntSettingMethod.invoke(customSettingsInstance, "miningSpeed", settings.getMiningSpeed(), 1, 10, inputMode);
             addIntSettingMethod.invoke(customSettingsInstance, "fuelDuration", settings.getFuelDuration(), 1, 10, inputMode);
 
-            syncToCustomSettings(settings);
             return true;
         } catch (Exception | LinkageError t) {
             System.err.println("[AutoMiner] Failed to register settings with CustomSettingsLib: " + t.getMessage());
             customSettingsInstance = null;
             return false;
         }
+    }
+
+    /**
+     * Callback for the Save button in the CustomSettingsLib GUI. CSL runs listeners *before* committing the
+     * new GUI values (onSave) and persists them itself, so reading or writing here would only see stale values.
+     * Instead, force a fresh pull on the next settings read.
+     */
+    static Runnable createOnSavedListener() {
+        return AutoMinerConfig::invalidateSyncTimer;
     }
 
     /**
@@ -132,17 +135,17 @@ public class CustomSettingsLibBridge {
             Map<String, Object> serverData = getServerDataMap(instance);
 
             if (settingsMap != null || serverData != null) {
-                Object rf = readSettingValue(settingsMap, serverData, "requireFuel");
+                Object rf = readSettingValue(instance, settingsMap, serverData, "requireFuel");
                 if (rf instanceof Boolean) {
                     settings.requireFuel = (Boolean) rf;
                 }
 
-                Object ms = readSettingValue(settingsMap, serverData, "miningSpeed");
+                Object ms = readSettingValue(instance, settingsMap, serverData, "miningSpeed");
                 if (ms instanceof Integer) {
                     settings.miningSpeed = Math.max(1, Math.min(10, (Integer) ms));
                 }
 
-                Object fd = readSettingValue(settingsMap, serverData, "fuelDuration");
+                Object fd = readSettingValue(instance, settingsMap, serverData, "fuelDuration");
                 if (fd instanceof Integer) {
                     settings.fuelDuration = Math.max(1, Math.min(10, (Integer) fd));
                 }
@@ -209,8 +212,23 @@ public class CustomSettingsLibBridge {
         return (Map<String, Object>) f.get(instance);
     }
 
-    private static Object readSettingValue(Map<String, Object> settingsMap, Map<String, Object> serverData, String key)
+    private static Object readSettingValue(Object instance, Map<String, Object> settingsMap, Map<String, Object> serverData, String key)
             throws ReflectiveOperationException {
+        // Prefer CSL's own resolution: in-game it returns the server-synced value for server settings,
+        // so multiplayer clients follow the server instead of their local config.
+        Optional<Method> getSetting = GET_SETTING_METHODS.computeIfAbsent(instance.getClass(), cls -> {
+            try {
+                return Optional.of(cls.getMethod("getSetting", String.class));
+            } catch (NoSuchMethodException e) {
+                return Optional.empty();
+            }
+        });
+        if (getSetting.isPresent()) {
+            Object val = getSetting.get().invoke(instance, key);
+            if (val != null) {
+                return val;
+            }
+        }
         if (settingsMap != null) {
             Object settingObj = settingsMap.get(key);
             if (settingObj != null) {
@@ -262,6 +280,25 @@ public class CustomSettingsLibBridge {
         }
     }
 
+    /**
+     * Pushes the current server-side settings to all connected clients via CustomSettingsLib's own packet,
+     * so chat-command changes reach clients without a reconnect. No-op without CustomSettingsLib.
+     *
+     * @param server The running server, may be null
+     */
+    public static void broadcastServerSettings(Server server) {
+        if (customSettingsInstance == null || server == null || server.network == null) {
+            return;
+        }
+        try {
+            Class<?> packetClass = Class.forName(SERVER_SETTINGS_PACKET_CLASS, true, CustomSettingsLibBridge.class.getClassLoader());
+            Packet packet = (Packet) packetClass.getConstructor(boolean.class).newInstance(false);
+            server.network.sendToAllClients(packet);
+        } catch (Exception | LinkageError e) {
+            logSyncErrorOnce("broadcastServerSettings", e);
+        }
+    }
+
     private static void logSyncErrorOnce(String context, Throwable e) {
         if (!loggedSyncError) {
             loggedSyncError = true;
@@ -281,6 +318,7 @@ public class CustomSettingsLibBridge {
             cachedServerDataField = null;
             GET_VALUE_METHODS.clear();
             VALUE_FIELDS.clear();
+            GET_SETTING_METHODS.clear();
             loggedSyncError = false;
         }
         AutoMinerConfig.invalidateSyncTimer();

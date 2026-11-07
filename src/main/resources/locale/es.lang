@@ -68,7 +68,6 @@ autominerleather=Minero Automático de Cuero
 
 [itemtooltip]
 autotip=Extrae automáticamente el mineral del suelo
-endgamedisabled=Deshabilitado en la configuración del servidor (Mineros de Fin del Juego DESACTIVADOS)
 
 [settingsui]
 generalsection=Configuración General
@@ -76,5 +75,3 @@ requireFuel=Requerir Combustible de Madera
 miningSpeed=Multiplicador de Velocidad de Minería
 fuelDuration=Multiplicador de Duración de Combustible
 
-balancesection=Progresión y Equilibrio
-enableEndgameMiners=Habilitar Mineros de Fin del Juego (Fragmentos/Omnicristal)

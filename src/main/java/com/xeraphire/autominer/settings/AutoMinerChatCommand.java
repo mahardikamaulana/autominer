@@ -93,6 +93,7 @@ public class AutoMinerChatCommand extends ChatCommand {
                         return false;
                     }
                     AutoMinerConfig.setMiningSpeed(speed);
+                    CustomSettingsLibBridge.broadcastServerSettings(server);
                     log.add("Mining speed multiplier set to " + AutoMinerConfig.getMiningSpeed() + "x");
                     return true;
                 } catch (NumberFormatException e) {
@@ -108,6 +109,7 @@ public class AutoMinerChatCommand extends ChatCommand {
                         return false;
                     }
                     AutoMinerConfig.setFuelDuration(fuel);
+                    CustomSettingsLibBridge.broadcastServerSettings(server);
                     log.add("Fuel duration multiplier set to " + AutoMinerConfig.getFuelDuration() + "x");
                     return true;
                 } catch (NumberFormatException e) {
@@ -122,10 +124,8 @@ public class AutoMinerChatCommand extends ChatCommand {
                     return false;
                 }
                 AutoMinerConfig.setRequireFuel(req);
+                CustomSettingsLibBridge.broadcastServerSettings(server);
                 log.add("Require fuel set to: " + AutoMinerConfig.isRequireFuel());
-                return true;
-            case "endgame":
-                log.add("Endgame miners are always available.");
                 return true;
             default:
                 log.add("Unknown subcommand: " + sub + ". Usage: /autominer " + getUsage());

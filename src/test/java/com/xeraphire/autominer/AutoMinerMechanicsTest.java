@@ -2,6 +2,11 @@ package com.xeraphire.autominer;
 
 import com.xeraphire.autominer.settings.AutoMinerConfig;
 import com.xeraphire.autominer.settings.CustomSettingsLibBridge;
+import necesse.engine.network.Packet;
+import necesse.engine.network.PacketReader;
+import necesse.engine.network.PacketWriter;
+import necesse.engine.save.SaveData;
+import necesse.inventory.Inventory;
 import necesse.inventory.InventoryItem;
 import necesse.inventory.item.Item;
 import necesse.inventory.recipe.Recipe;
@@ -39,7 +44,6 @@ class AutoMinerMechanicsTest {
         AutoMinerConfig.setRequireFuel(true);
         AutoMinerConfig.setMiningSpeed(1);
         AutoMinerConfig.setFuelDuration(1);
-        AutoMinerConfig.setEnableEndgameMiners(true);
     }
 
     @AfterEach
@@ -47,7 +51,6 @@ class AutoMinerMechanicsTest {
         AutoMinerConfig.setRequireFuel(true);
         AutoMinerConfig.setMiningSpeed(1);
         AutoMinerConfig.setFuelDuration(1);
-        AutoMinerConfig.setEnableEndgameMiners(true);
     }
 
     private AutoMinerObjectEntity allocateEntity(AutoMinerDefinition def) throws Exception {
@@ -56,6 +59,16 @@ class AutoMinerMechanicsTest {
         defField.setAccessible(true);
         defField.set(entity, def);
         return entity;
+    }
+
+    private static Field findField(Class<?> cls, String name) throws NoSuchFieldException {
+        for (Class<?> curr = cls; curr != null; curr = curr.getSuperclass()) {
+            try {
+                return curr.getDeclaredField(name);
+            } catch (NoSuchFieldException ignored) {
+            }
+        }
+        throw new NoSuchFieldException(name);
     }
 
     private AutoMinerObject allocateObject(AutoMinerDefinition def, Recipe prodRecipe) throws Exception {
@@ -112,12 +125,12 @@ class AutoMinerMechanicsTest {
 
     @ParameterizedTest(name = "durationMultiplier={0}x -> log={1}ms, fuelskull={2}ms")
     @CsvSource({
-            "1, 60000, 300000",
-            "2, 120000, 600000",
-            "5, 300000, 1500000",
-            "10, 600000, 3000000"
+            "1, 60000, 120000",
+            "2, 120000, 240000",
+            "5, 300000, 600000",
+            "10, 600000, 1200000"
     })
-    @DisplayName("getFuelTime scales with fuelDuration and gives 5x burn time for fuelskull")
+    @DisplayName("getFuelTime scales with fuelDuration and gives 2x burn time for fuelskull")
     void fuelTimeCalculation(int multiplier, int expectedLogTime, int expectedSkullTime) throws Exception {
         AutoMinerObjectEntity entity = allocateEntity(AutoMinerDefinition.DEFINITIONS[0]);
         AutoMinerConfig.setFuelDuration(multiplier);
@@ -128,7 +141,7 @@ class AutoMinerMechanicsTest {
         InventoryItem logInvItem = allocateInventoryItem("oaklog");
         assertEquals(expectedLogTime, entity.getFuelTime(logInvItem));
 
-        // Fuel skull item (5x)
+        // Fuel skull item (2x)
         InventoryItem skullInvItem = allocateInventoryItem("fuelskull");
         assertEquals(expectedSkullTime, entity.getFuelTime(skullInvItem));
         assertTrue(entity.isValidFuelItem(skullInvItem));
@@ -146,17 +159,12 @@ class AutoMinerMechanicsTest {
     }
 
     @Test
-    @DisplayName("Endgame miners are always available and active")
-    void endgameMinerToggleBehavior() throws Exception {
-        // Tier 1 miner (stone, 4000ms, isEndgame = false)
+    @DisplayName("Early and endgame miners are equally available and active")
+    void allTiersAvailable() throws Exception {
+        // Tier 1 miner (stone, 4000ms) and Tier 4 miner (ascendedshard, 30000ms)
         AutoMinerDefinition tier1Def = AutoMinerDefinition.DEFINITIONS[0];
-        assertFalse(tier1Def.isEndgame);
-
-        // Tier 4 miner (ascendedshard, 30000ms, isEndgame = true)
         AutoMinerDefinition tier4Def = AutoMinerDefinition.DEFINITIONS[AutoMinerDefinition.DEFINITIONS.length - 1];
-        assertTrue(tier4Def.isEndgame);
 
-        AutoMinerObjectEntity tier1Entity = allocateEntity(tier1Def);
         AutoMinerObjectEntity tier4Entity = allocateEntity(tier4Def);
 
         Recipe dummyRecipe = mock(Recipe.class);
@@ -164,17 +172,8 @@ class AutoMinerMechanicsTest {
         AutoMinerObject tier4Obj = allocateObject(tier4Def, dummyRecipe);
 
         AutoMinerConfig.setRequireFuel(false);
-        assertFalse(tier1Entity.isEndgameDisabled());
-        assertFalse(tier4Entity.isEndgameDisabled());
         assertEquals(60000, tier4Entity.getNextFuelBurnTime(false));
-        assertEquals(1, tier4Obj.streamSettlementRecipes(null, 0, 0).count());
         assertTrue(tier4Entity.canUseFuel());
-
-        // Calling setEnableEndgameMiners(false) does not disable endgame miners
-        AutoMinerConfig.setEnableEndgameMiners(false);
-        assertTrue(AutoMinerConfig.isEnableEndgameMiners());
-        assertFalse(tier4Entity.isEndgameDisabled());
-        assertEquals(60000, tier4Entity.getNextFuelBurnTime(false));
         assertEquals(1, tier4Obj.streamSettlementRecipes(null, 0, 0).count());
         assertEquals(1, tier1Obj.streamSettlementRecipes(null, 0, 0).count());
     }
@@ -192,6 +191,44 @@ class AutoMinerMechanicsTest {
         // Re-enable fuel requirement mid-burn -> isFuelRunning must immediately return false
         AutoMinerConfig.setRequireFuel(true);
         assertFalse(entity.isFuelRunning());
+    }
+
+    @Test
+    @DisplayName("Free-fuel flag survives a save/load round trip")
+    void freeFuelFlagPersists() throws Exception {
+        AutoMinerObjectEntity entity = allocateEntity(AutoMinerDefinition.DEFINITIONS[0]);
+        AutoMinerConfig.setRequireFuel(false);
+        entity.getNextFuelBurnTime(true);
+        assertTrue(entity.isBurningFreeFuel());
+
+        // The base class saves its inventory, which the bare test entity lacks
+        Field inventoryField = findField(AutoMinerObjectEntity.class, "inventory");
+        UNSAFE.putObject(entity, UNSAFE.objectFieldOffset(inventoryField), new Inventory(6));
+
+        SaveData save = new SaveData("OE");
+        entity.addSaveData(save);
+        AutoMinerObjectEntity restored = allocateEntity(AutoMinerDefinition.DEFINITIONS[0]);
+        UNSAFE.putObject(restored, UNSAFE.objectFieldOffset(inventoryField), new Inventory(6));
+        restored.applyLoadData(save.toLoadData());
+        assertTrue(restored.isBurningFreeFuel());
+
+        // Reloaded with requireFuel enabled: the leftover free burn must not keep the miner running
+        AutoMinerConfig.setRequireFuel(true);
+        assertFalse(restored.isFuelRunning());
+    }
+
+    @Test
+    @DisplayName("Free-fuel flag is carried to clients by the progress packet")
+    void freeFuelFlagSyncsToClients() throws Exception {
+        AutoMinerObjectEntity server = allocateEntity(AutoMinerDefinition.DEFINITIONS[0]);
+        AutoMinerConfig.setRequireFuel(false);
+        server.getNextFuelBurnTime(true);
+
+        Packet packet = new Packet();
+        server.setupProgressPacket(new PacketWriter(packet));
+        AutoMinerObjectEntity client = allocateEntity(AutoMinerDefinition.DEFINITIONS[0]);
+        client.applyProgressPacket(new PacketReader(packet));
+        assertTrue(client.isBurningFreeFuel());
     }
 
     @Test

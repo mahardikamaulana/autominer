@@ -70,25 +70,22 @@ class AutoMinerDefinitionTest {
         assertTrue(def.ingredientAmount > 0, "ingredientAmount must be > 0 for " + def.stringID);
 
         assertTrue(def.processTimeMs >= 1000, "processTimeMs must be >= 1000ms for " + def.stringID);
-        assertEquals(def.processTimeMs >= 24000, def.isEndgame, "isEndgame mismatch for " + def.stringID);
     }
 
     @Test
-    @DisplayName("Default 9-arg constructor sets processTimeMs to 8000 and isEndgame to false, and 11-arg allows explicit isEndgame")
+    @DisplayName("Default 9-arg constructor sets processTimeMs to 8000, and 10-arg allows an explicit process time")
     void convenienceConstructorDefaults() {
         AutoMinerDefinition def = new AutoMinerDefinition(
                 "testminer", "objects/StoneAM", "TESTTECH", "stone", 1,
                 () -> null, "stone", 10, null
         );
         assertEquals(8000, def.processTimeMs);
-        assertFalse(def.isEndgame);
 
-        AutoMinerDefinition explicitEndgame = new AutoMinerDefinition(
-                "customendgame", "objects/StoneAM", "CUSTOMTECH", "stone", 1,
-                () -> null, "stone", 10, null, 12000, true
+        AutoMinerDefinition explicitTime = new AutoMinerDefinition(
+                "customminer", "objects/StoneAM", "CUSTOMTECH", "stone", 1,
+                () -> null, "stone", 10, null, 12000
         );
-        assertEquals(12000, explicitEndgame.processTimeMs);
-        assertTrue(explicitEndgame.isEndgame);
+        assertEquals(12000, explicitTime.processTimeMs);
     }
 
     @Test
@@ -163,12 +160,10 @@ class AutoMinerDefinitionTest {
         assertNotNull(tooltipSection, "Missing [itemtooltip] section in " + locale + ".lang");
         assertNotNull(tooltipSection.get("autotip"), "Missing itemtooltip.autotip in " + locale + ".lang");
         assertFalse(tooltipSection.get("autotip").isBlank());
-        assertNotNull(tooltipSection.get("endgamedisabled"), "Missing itemtooltip.endgamedisabled in " + locale + ".lang");
-        assertFalse(tooltipSection.get("endgamedisabled").isBlank());
 
         Map<String, String> settingsSection = sections.get("settingsui");
         assertNotNull(settingsSection, "Missing [settingsui] section in " + locale + ".lang");
-        for (String key : List.of("generalsection", "requireFuel", "miningSpeed", "fuelDuration", "balancesection", "enableEndgameMiners")) {
+        for (String key : List.of("generalsection", "requireFuel", "miningSpeed", "fuelDuration")) {
             String val = settingsSection.get(key);
             assertNotNull(val, "Missing [settingsui] key '" + key + "' in " + locale + ".lang");
             assertFalse(val.isBlank(), "Blank [settingsui] key '" + key + "' in " + locale + ".lang");

@@ -1,6 +1,10 @@
 package com.xeraphire.autominer;
 
 import com.xeraphire.autominer.settings.AutoMinerConfig;
+import necesse.engine.network.PacketReader;
+import necesse.engine.network.PacketWriter;
+import necesse.engine.save.LoadData;
+import necesse.engine.save.SaveData;
 import necesse.entity.objectEntity.AnyLogFueledProcessingTechInventoryObjectEntity;
 import necesse.inventory.InventoryItem;
 import necesse.inventory.recipe.Recipe;
@@ -9,6 +13,7 @@ import necesse.level.maps.Level;
 
 public class AutoMinerObjectEntity extends AnyLogFueledProcessingTechInventoryObjectEntity {
     public static int logFuelTime = 60000;
+    public static int fuelSkullMultiplier = 2;
     public static int defaultRecipeProcessTime = 8000;
     public final AutoMinerDefinition definition;
     private boolean burningFreeFuel = false;
@@ -18,19 +23,12 @@ public class AutoMinerObjectEntity extends AnyLogFueledProcessingTechInventoryOb
         this.definition = definition;
     }
 
-    public boolean isEndgameDisabled() {
-        return false;
-    }
-
     public boolean isBurningFreeFuel() {
         return this.burningFreeFuel;
     }
 
     @Override
     public boolean isFuelRunning() {
-        if (this.isEndgameDisabled()) {
-            return false;
-        }
         if (this.burningFreeFuel && AutoMinerConfig.isRequireFuel()) {
             return false;
         }
@@ -49,7 +47,7 @@ public class AutoMinerObjectEntity extends AnyLogFueledProcessingTechInventoryOb
     public int getFuelTime(InventoryItem item) {
         int duration = AutoMinerConfig.getFuelDuration();
         int baseTime = (item != null && item.item != null && "fuelskull".equals(item.item.getStringID()))
-                ? logFuelTime * 5
+                ? logFuelTime * fuelSkullMultiplier
                 : logFuelTime;
         return baseTime * Math.max(1, duration);
     }
@@ -63,9 +61,6 @@ public class AutoMinerObjectEntity extends AnyLogFueledProcessingTechInventoryOb
 
     @Override
     public boolean canUseFuel() {
-        if (this.isEndgameDisabled()) {
-            return false;
-        }
         if (!AutoMinerConfig.isRequireFuel()) {
             return true;
         }
@@ -74,15 +69,9 @@ public class AutoMinerObjectEntity extends AnyLogFueledProcessingTechInventoryOb
 
     @Override
     public int getNextFuelBurnTime(boolean consume) {
-        if (this.isEndgameDisabled()) {
-            if (consume) {
-                this.burningFreeFuel = false;
-            }
-            return 0;
-        }
         if (!AutoMinerConfig.isRequireFuel()) {
             if (consume) {
-                this.burningFreeFuel = true;
+                this.setBurningFreeFuel(true);
             }
             return this.getFuelTime(null);
         }
@@ -93,8 +82,53 @@ public class AutoMinerObjectEntity extends AnyLogFueledProcessingTechInventoryOb
             return 0;
         });
         if (consume && burnTime > 0) {
-            this.burningFreeFuel = false;
+            this.setBurningFreeFuel(false);
         }
         return burnTime;
+    }
+
+    private void setBurningFreeFuel(boolean burningFreeFuel) {
+        if (this.burningFreeFuel != burningFreeFuel) {
+            this.burningFreeFuel = burningFreeFuel;
+            // The flag rides on the progress packet, so clients see free-fuel cutoffs too
+            this.markProgressDirty();
+        }
+    }
+
+    // Persist the free-fuel flag so a free burn in progress can't survive a reload with requireFuel enabled
+    @Override
+    public void addSaveData(SaveData save) {
+        super.addSaveData(save);
+        save.addBoolean("burningFreeFuel", this.burningFreeFuel);
+    }
+
+    @Override
+    public void applyLoadData(LoadData save) {
+        super.applyLoadData(save);
+        this.burningFreeFuel = save.getBoolean("burningFreeFuel", false);
+    }
+
+    @Override
+    public void setupContentPacket(PacketWriter writer) {
+        super.setupContentPacket(writer);
+        writer.putNextBoolean(this.burningFreeFuel);
+    }
+
+    @Override
+    public void applyContentPacket(PacketReader reader) {
+        super.applyContentPacket(reader);
+        this.burningFreeFuel = reader.getNextBoolean();
+    }
+
+    @Override
+    public void setupProgressPacket(PacketWriter writer) {
+        super.setupProgressPacket(writer);
+        writer.putNextBoolean(this.burningFreeFuel);
+    }
+
+    @Override
+    public void applyProgressPacket(PacketReader reader) {
+        super.applyProgressPacket(reader);
+        this.burningFreeFuel = reader.getNextBoolean();
     }
 }

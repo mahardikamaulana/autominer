@@ -26,7 +26,6 @@ class AutoMinerSettingsTest {
         assertTrue(settings.isRequireFuel());
         assertEquals(1, settings.getMiningSpeed());
         assertEquals(1, settings.getFuelDuration());
-        assertTrue(settings.isEnableEndgameMiners());
     }
 
     @ParameterizedTest(name = "input={0} -> expected={1}")
@@ -56,10 +55,6 @@ class AutoMinerSettingsTest {
         settings.setRequireFuel(true);
         assertTrue(settings.isRequireFuel());
 
-        settings.setEnableEndgameMiners(false);
-        assertTrue(settings.isEnableEndgameMiners());
-        settings.setEnableEndgameMiners(true);
-        assertTrue(settings.isEnableEndgameMiners());
     }
 
     @Test
@@ -68,7 +63,6 @@ class AutoMinerSettingsTest {
         settings.requireFuel = false;
         settings.miningSpeed = 7;
         settings.fuelDuration = 4;
-        settings.enableEndgameMiners = false;
 
         SaveData save = new SaveData("SETTINGS");
         settings.addSaveData(save);
@@ -80,7 +74,6 @@ class AutoMinerSettingsTest {
         assertFalse(restored.isRequireFuel());
         assertEquals(7, restored.getMiningSpeed());
         assertEquals(4, restored.getFuelDuration());
-        assertTrue(restored.isEnableEndgameMiners());
     }
 
     @Test
@@ -90,7 +83,6 @@ class AutoMinerSettingsTest {
         save.addBoolean("requireFuel", false);
         save.addInt("miningSpeed", 50);
         save.addInt("fuelDuration", -3);
-        save.addBoolean("enableEndgameMiners", true);
 
         AutoMinerSettings restored = new AutoMinerSettings();
         restored.applyLoadData(save.toLoadData());
@@ -98,7 +90,6 @@ class AutoMinerSettingsTest {
         assertFalse(restored.isRequireFuel());
         assertEquals(10, restored.getMiningSpeed());
         assertEquals(1, restored.getFuelDuration());
-        assertTrue(restored.isEnableEndgameMiners());
     }
 
     @Test
@@ -111,7 +102,6 @@ class AutoMinerSettingsTest {
         assertTrue(restored.isRequireFuel());
         assertEquals(1, restored.getMiningSpeed());
         assertEquals(1, restored.getFuelDuration());
-        assertTrue(restored.isEnableEndgameMiners());
     }
 
     @Test
@@ -120,18 +110,15 @@ class AutoMinerSettingsTest {
         AutoMinerConfig.setRequireFuel(false);
         AutoMinerConfig.setMiningSpeed(8);
         AutoMinerConfig.setFuelDuration(3);
-        AutoMinerConfig.setEnableEndgameMiners(false);
 
         assertFalse(AutoMinerConfig.isRequireFuel());
         assertEquals(8, AutoMinerConfig.getMiningSpeed());
         assertEquals(3, AutoMinerConfig.getFuelDuration());
-        assertTrue(AutoMinerConfig.isEnableEndgameMiners());
 
         // Restore defaults
         AutoMinerConfig.setRequireFuel(true);
         AutoMinerConfig.setMiningSpeed(1);
         AutoMinerConfig.setFuelDuration(1);
-        AutoMinerConfig.setEnableEndgameMiners(true);
     }
 }
 
